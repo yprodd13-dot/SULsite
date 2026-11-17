@@ -8,7 +8,7 @@
 
   var ROOT = '../';
   var LS = { draft: 'sul.draft', gh: 'sul.gh', tab: 'sul.tab', lastPub: 'sul.lastPublish', page: 'sul.pageSel' };
-  var FONTS = ['Fraunces', 'Space Grotesk', 'Poppins', 'Inter', 'Playfair Display', 'DM Serif Display', 'Abril Fatface', 'Alfa Slab One', 'Unbounded', 'Syne', 'Rubik Mono One', 'Bagel Fat One', 'Righteous', 'Chewy', 'Gloock', 'Monoton', 'Press Start 2P', 'Silkscreen', 'Pixelify Sans', 'VT323', 'System', 'Georgia', 'Courier'];
+  var FONTS = ['Pixelify Sans', 'Silkscreen', 'Press Start 2P', 'VT323', 'Clash Display', 'Satoshi', 'General Sans', 'Cabinet Grotesk', 'Chivo', 'Fraunces', 'Space Grotesk', 'Poppins', 'Inter', 'Playfair Display', 'DM Serif Display', 'Abril Fatface', 'Alfa Slab One', 'Unbounded', 'Syne', 'Rubik Mono One', 'Bagel Fat One', 'Righteous', 'Chewy', 'Gloock', 'Monoton', 'Press Start 2P', 'System', 'Georgia', 'Courier'];
   var SOCIALS = ['instagram', 'youtube', 'tiktok', 'soundcloud', 'spotify', 'x', 'discord', 'twitch', 'beatstars', 'email', 'link'];
 
   var S = {
@@ -205,8 +205,8 @@
   /* ================= state / history / sync ================= */
   function normalize(c) {
     c = c && typeof c === 'object' ? c : {};
-    ['meta', 'brand', 'intro', 'theme', 'background', 'animations', 'header', 'footer'].forEach(function (k) { if (!c[k] || typeof c[k] !== 'object' || Array.isArray(c[k])) c[k] = {}; });
-    ['socials', 'pages', 'kits', 'galleryCategories', 'gallery'].forEach(function (k) { if (!Array.isArray(c[k])) c[k] = []; });
+    ['meta', 'brand', 'intro', 'theme', 'background', 'animations', 'header', 'footer', 'announcement'].forEach(function (k) { if (!c[k] || typeof c[k] !== 'object' || Array.isArray(c[k])) c[k] = {}; });
+    ['socials', 'pages', 'kits', 'galleryCategories', 'gallery', 'reviews'].forEach(function (k) { if (!Array.isArray(c[k])) c[k] = []; });
     if (!c.pages.length) c.pages.push({ id: 'home', title: 'HOME', inNav: true, sections: [] });
     c.pages.forEach(function (p, i) { if (!p.id) p.id = 'page-' + (i + 1); if (!Array.isArray(p.sections)) p.sections = []; p.sections.forEach(function (s) { if (!s.id) s.id = uid('s'); }); });
     c.kits.forEach(function (k) { if (!k.id) k.id = uid('k'); });
@@ -677,11 +677,14 @@
 
   /* ================= section types ================= */
   var TYPES = {
-    hero: { label: 'Hero (logo + intro text)', icon: '✦', desc: 'Big logo with your name, tagline and buttons.' },
-    kits: { label: 'Drum kits grid', icon: '🥁', desc: 'Shows your drum kits with GO TO buttons.' },
-    gallery: { label: 'Gallery (cover arts / edits)', icon: '🖼', desc: 'Grid of your work that opens big when clicked.' },
+    hero: { label: 'Hero (window + big title)', icon: '✦', desc: 'Your logo in a pixel window, big title, buttons and search.' },
+    kits: { label: 'Item shop (drum kits)', icon: '🥁', desc: 'Your kits as game items with tags, price and GO TO.' },
+    gallery: { label: 'Gallery (cover arts / edits)', icon: '🖼', desc: 'Pixel-framed grid that opens big when clicked.' },
+    reviews: { label: 'Reviews (speech bubbles)', icon: '💬', desc: 'Scrolling quotes from people (edit them in 💬 Reviews).' },
+    compare: { label: 'VS screen', icon: '⚔', desc: 'Your kits vs other kits, side by side.' },
+    cards: { label: 'Picture cards', icon: '🃏', desc: 'Grid of pictures with titles & links (placements, songs, categories…).' },
     text: { label: 'Title + text', icon: '¶', desc: 'A heading with a paragraph and optional buttons.' },
-    cta: { label: 'Call to action box', icon: '📣', desc: 'Glassy box with a big title and buttons.' },
+    cta: { label: 'RPG dialog box', icon: '📣', desc: 'Game-style text box with your face/logo and choice buttons.' },
     marquee: { label: 'Scrolling text band', icon: '〰', desc: 'Moving ticker strip.' },
     video: { label: 'Video', icon: '▶', desc: 'YouTube / Vimeo link or a video file.' },
     image: { label: 'Image', icon: '🌄', desc: 'A single picture with optional link.' },
@@ -689,14 +692,17 @@
     spacer: { label: 'Empty space', icon: '↕', desc: 'Adds space between sections.' }
   };
   function newSection(type) {
-    var s = { id: uid('s'), type: type, visible: true, align: type === 'hero' ? 'left' : 'center' };
+    var s = { id: uid('s'), type: type, visible: true, align: type === 'compare' ? 'center' : 'left' };
     switch (type) {
-      case 'hero': Object.assign(s, { layout: 'logo-left', logo: S.cfg.brand.logo || 'assets/img/logo.png', logoSize: 620, title: S.cfg.brand.name || 'TITLE', text: 'Your tagline here', smallText: '', smallLink: '', buttons: [{ id: uid('b'), text: '✦ BUTTON', link: '', style: 'primary', newTab: false }], fullHeight: true }); break;
-      case 'kits': Object.assign(s, { title: 'DRUM KITS', subtitle: '', filter: 'all', limit: 0, columns: 3, showSearch: false, moreText: '', moreLink: '' }); break;
-      case 'gallery': Object.assign(s, { title: 'GALLERY', subtitle: '', category: 'all', showTabs: true, showLabels: false, layout: 'grid', columns: 3, limit: 0, moreText: '', moreLink: '' }); break;
+      case 'hero': Object.assign(s, { layout: 'split-reverse', rightSide: 'art', logo: S.cfg.brand.logo || 'assets/img/logo.png', windowTitle: 'sul0557.exe', windowFooter: 'LV.99 PRODUCER', status: '', title: 'BIG {TITLE}', text: 'Your tagline here', smallText: '', smallLink: '', buttons: [{ id: uid('b'), text: '▶ BUTTON', link: '', style: 'primary', newTab: false }], showSearch: false, searchPlaceholder: 'search kits...', chips: '', showReviews: false, fullHeight: false }); break;
+      case 'kits': Object.assign(s, { title: 'ITEM {SHOP}', subtitle: '', style: 'box', filter: 'all', limit: 0, columns: 3, showSearch: false, moreText: '', moreLink: '', more2Text: '', more2Link: '', moreStyle: 'top' }); break;
+      case 'gallery': Object.assign(s, { title: 'GALLERY', subtitle: '', category: 'all', showTabs: true, showLabels: false, layout: 'grid', columns: 3, limit: 0, moreText: '', moreLink: '', moreStyle: 'top' }); break;
+      case 'reviews': Object.assign(s, { title: '', subtitle: '' }); break;
+      case 'compare': Object.assign(s, { title: 'US {VS} THEM', subtitle: 'choose your fighter', youLabel: 'SUL KITS', themLabel: 'OTHER KITS', rows: [{ id: uid('r'), label: 'SOUNDS', you: 'Crispy & mixed', them: 'Muddy' }] }); break;
+      case 'cards': Object.assign(s, { title: 'USED {IN...}', subtitle: '', columns: 4, items: [{ id: uid('c'), image: '', title: 'ARTIST — SONG', sub: 'prod. sul0557', link: '', newTab: true }], moreText: '', moreLink: '', moreStyle: 'top' }); break;
       case 'text': Object.assign(s, { title: 'TITLE', text: 'Write something here. **Bold**, *italic* and [links](https://instagram.com) work.', size: 'normal', buttons: [] }); break;
-      case 'cta': Object.assign(s, { title: 'LET’S WORK', text: 'Short message here.', buttons: [{ id: uid('b'), text: 'CONTACT ME', link: '', style: 'primary', newTab: true }] }); break;
-      case 'marquee': Object.assign(s, { text: 'NEW KITS ✦ COVER ARTS ✦ EDITS ✦', style: 'gradient', tilt: -2 }); break;
+      case 'cta': Object.assign(s, { title: 'SUL', image: '', text: 'Short message here.', buttons: [{ id: uid('b'), text: '▶ CONTACT ME', link: '', style: 'primary', newTab: true }] }); break;
+      case 'marquee': Object.assign(s, { text: 'NEW KITS ✦ COVER ARTS ✦ EDITS ✦', style: 'gradient', tilt: 0 }); break;
       case 'video': Object.assign(s, { title: '', subtitle: '', url: '', poster: '' }); break;
       case 'image': Object.assign(s, { title: '', image: '', caption: '', link: '', newTab: true, maxWidth: 900 }); break;
       case 'links': Object.assign(s, { title: 'LINKS', subtitle: '', links: [{ id: uid('b'), text: 'INSTAGRAM', link: 'https://instagram.com/', style: 'primary', newTab: true }] }); break;
@@ -708,55 +714,97 @@
     var t = s.title || s.text || s.url || '';
     if (s.type === 'kits') t = (s.title || 'Kits') + ' · ' + (s.filter === 'featured' ? 'featured only' : 'all kits');
     if (s.type === 'gallery') t = (s.title || 'Gallery') + ' · ' + (s.category && s.category !== 'all' ? catLabel(s.category) : 'everything');
+    if (s.type === 'reviews') t = (S.cfg.reviews || []).length + ' reviews';
     if (s.type === 'spacer') t = (s.height || 60) + 'px';
-    return String(t).replace(/\s+/g, ' ').slice(0, 60);
+    return String(t).replace(/[{}]/g, '').replace(/\s+/g, ' ').slice(0, 60) + (s.width === 'half' ? ' · half width' : '');
   }
   function catLabel(id) { var c = S.cfg.galleryCategories.filter(function (x) { return x.id === id; })[0]; return c ? c.label : id; }
+  var TITLE_HELP = 'Put words in {curly brackets} to make them holographic. Press Enter for a new line.';
+  // reusable editor for a list of small objects
+  function objList(owner, key, o) {
+    if (!Array.isArray(owner[key])) owner[key] = [];
+    owner[key].forEach(function (x) { if (!x.id) x.id = uid('o'); });
+    var list = listEditor(owner[key], { key: o.key, title: o.title, sub: o.sub, thumb: o.thumb, body: o.body, empty: o.empty });
+    return group(o.label, o.subLabel, list, el('div', { class: 'add-row' }, el('button', {
+      class: 'ab small', type: 'button', text: o.addText || '+ Add', onclick: function () { var n = o.make(); n.id = n.id || uid('o'); list.addItem(n); }
+    })));
+  }
+  function moreFields(s, h) {
+    return group('“See more” links', 'optional', row(fText(s, 'moreText', 'Link text', { ph: 'SEE ALL ▶' }), fLink(s, 'moreLink', 'Goes to', { help: ' ' })),
+      row(fText(s, 'more2Text', 'Second link text'), fLink(s, 'more2Link', 'Goes to', { help: ' ' })),
+      fSelect(s, 'moreStyle', 'Where', [['top', 'Small link at the top right'], ['bottom', 'Big buttons underneath']], { def: 'top' }));
+  }
   function sectionBody(s, c, head) {
     var h = function () { head(); };
     var F = [];
     if (s.type === 'hero') {
-      F.push(group('Content', null,
-        fText(s, 'title', 'Big title', { after: h }), fText(s, 'text', 'Tagline', { multi: true, rows: 2, after: h }),
+      F.push(group('Text', null,
+        fText(s, 'status', 'Little status badge (optional)', { ph: 'PLAYER 1: SUL0557' }),
+        fText(s, 'title', 'Big title', { multi: true, rows: 3, after: h, help: TITLE_HELP }),
+        fText(s, 'text', 'Text under the title', { multi: true, rows: 2 }),
         row(fText(s, 'smallText', 'Small line (e.g. your @)'), fLink(s, 'smallLink', 'Small line link', { help: ' ' }))));
-      F.push(group('Logo & layout', null,
-        fImage(s, 'logo', 'Logo / picture'),
-        row(fSelect(s, 'layout', 'Layout', [['logo-left', 'Logo left, text right'], ['logo-right', 'Text left, logo right'], ['centered', 'Centered (stacked)'], ['text-only', 'Text only']]),
-          fRange(s, 'logoSize', 'Logo size', { min: 200, max: 1100, step: 10, def: 620, suffix: 'px' })),
-        fToggle(s, 'fullHeight', 'Fill the whole screen height', { defOn: true })));
       F.push(buttonsEditor(s, 'buttons', 'Buttons'));
+      F.push(group('Right side', null,
+        row(fSelect(s, 'layout', 'Layout', [['split-reverse', 'Picture left, text right'], ['split', 'Text left, picture right'], ['centered', 'Centered (no picture)']]),
+          fSelect(s, 'rightSide', 'Picture', [['art', 'Logo in a pixel window'], ['mosaic', 'Scrolling wall of your work'], ['logo', 'Just the floating logo'], ['none', 'Nothing']])),
+        fImage(s, 'logo', 'Logo / picture'),
+        row(fText(s, 'windowTitle', 'Window title', { ph: 'sul0557.exe' }), fText(s, 'windowFooter', 'Window footer text', { ph: 'LV.99 PRODUCER' })),
+        fToggle(s, 'showReviews', 'Show scrolling reviews under the picture'),
+        fToggle(s, 'fullHeight', 'Fill the whole screen height')));
+      F.push(group('Search bar', null, fToggle(s, 'showSearch', 'Show a search bar', { help: 'Searches your kits.' }),
+        fText(s, 'searchPlaceholder', 'Placeholder text', { ph: 'search kits...' }),
+        fText(s, 'chips', 'Quick search buttons (comma separated)', { ph: 'drum kit, free, 808' })));
     } else if (s.type === 'text') {
-      F.push(group('Content', null, fText(s, 'title', 'Title', { after: h }),
+      F.push(group('Content', null, fText(s, 'title', 'Title', { after: h, multi: true, rows: 2, help: TITLE_HELP }),
         fText(s, 'text', 'Text', { multi: true, rows: 5, after: h, help: '<b>**bold**</b>, <i>*italic*</i>, [link text](https://…) and new lines work.' }),
-        fSelect(s, 'size', 'Text size', [['small', 'Small'], ['normal', 'Normal'], ['large', 'Large']], { def: 'normal' })));
+        fSelect(s, 'size', 'Size', [['small', 'Small'], ['normal', 'Normal'], ['large', 'Large']], { def: 'normal' })));
       F.push(buttonsEditor(s, 'buttons', 'Buttons (optional)'));
     } else if (s.type === 'kits') {
-      F.push(group('Kits grid', null, fText(s, 'title', 'Title', { after: h }), fText(s, 'subtitle', 'Subtitle'),
-        row(fSelect(s, 'filter', 'Which kits', [['all', 'All kits'], ['featured', 'Only ones marked “Featured”']], { after: h }),
-          fNum(s, 'limit', 'Max to show (0 = all)', { min: 0, max: 100 })),
-        row(fRange(s, 'columns', 'Columns', { min: 1, max: 5, def: 3 }), el('div', null, fToggle(s, 'showSearch', 'Show a search bar'))),
+      F.push(group('Item shop', null, fText(s, 'title', 'Title', { after: h, help: TITLE_HELP }), fText(s, 'subtitle', 'Subtitle'),
+        row(fSelect(s, 'filter', 'Which kits', [['all', 'All kits'], ['featured', 'Only ones marked “Featured”']], { after: h }), fNum(s, 'limit', 'Max to show (0 = all)', { min: 0, max: 100 })),
+        row(fRange(s, 'columns', 'Columns', { min: 1, max: 5, def: 3 }), fSelect(s, 'style', 'Look', [['box', 'Inside a grid panel'], ['plain', 'Just the cards']], { def: 'box' })),
+        fToggle(s, 'showSearch', 'Show a search bar'),
         el('div', { class: 'note', html: 'Edit the kits themselves in <b>🥁 Drum Kits</b>.' })));
-      F.push(group('“See more” button', 'optional', row(fText(s, 'moreText', 'Button text'), fLink(s, 'moreLink', 'Goes to', { help: ' ' }))));
+      F.push(moreFields(s, h));
     } else if (s.type === 'gallery') {
       var cats = [['all', 'Everything']].concat(S.cfg.galleryCategories.map(function (g) { return [g.id, g.label]; }));
-      F.push(group('Gallery', null, fText(s, 'title', 'Title', { after: h }), fText(s, 'subtitle', 'Subtitle'),
+      F.push(group('Gallery', null, fText(s, 'title', 'Title', { after: h, help: TITLE_HELP }), fText(s, 'subtitle', 'Subtitle'),
         row(fSelect(s, 'category', 'Show', cats, { after: h, def: 'all' }), fNum(s, 'limit', 'Max to show (0 = all)', { min: 0, max: 200 })),
-        row(fSelect(s, 'layout', 'Layout', [['grid', 'Square grid'], ['masonry', 'Masonry (keeps image shapes)']], { def: 'grid' }), fRange(s, 'columns', 'Columns', { min: 1, max: 6, def: 3 })),
+        row(fSelect(s, 'layout', 'Layout', [['bento', 'Bento (big + small tiles)'], ['grid', 'Square grid'], ['masonry', 'Masonry (keeps image shapes)']], { def: 'grid' }), fRange(s, 'columns', 'Columns (grid/masonry)', { min: 1, max: 6, def: 3 })),
         fToggle(s, 'showTabs', 'Show category tabs (when showing Everything)'),
         fToggle(s, 'showLabels', 'Show category label on each picture'),
-        fText(s, 'allLabel', '“All” tab text', { ph: 'ALL' }),
+        fText(s, 'allLabel', '“All” tab text', { ph: 'All' }),
         el('div', { class: 'note', html: 'Add pictures & videos in <b>🖼 Cover Arts & Edits</b>.' })));
-      F.push(group('“See more” button', 'optional', row(fText(s, 'moreText', 'Button text'), fLink(s, 'moreLink', 'Goes to', { help: ' ' }))));
+      F.push(moreFields(s, h));
+    } else if (s.type === 'reviews') {
+      F.push(group('Reviews strip', null, fText(s, 'title', 'Title (optional)', { after: h, help: TITLE_HELP }), fText(s, 'subtitle', 'Subtitle'),
+        el('div', { class: 'note', html: 'Edit the quotes in <b>💬 Reviews</b>.' })));
+    } else if (s.type === 'compare') {
+      F.push(group('VS screen', null, fText(s, 'title', 'Title', { after: h, help: TITLE_HELP }), fText(s, 'subtitle', 'Subtitle'),
+        row(fText(s, 'youLabel', 'Your side name'), fText(s, 'themLabel', 'Other side name'))));
+      F.push(objList(s, 'rows', { key: 'cmp-' + s.id, label: 'Rows', addText: '+ Add row',
+        title: function (r) { return r.label || '(row)'; }, sub: function (r) { return r.you; },
+        body: function (r, cc, hh) { add(cc, [fText(r, 'label', 'Category', { after: hh }), row(fText(r, 'you', 'You', { after: hh }), fText(r, 'them', 'Them'))]); },
+        make: function () { return { label: 'NEW', you: '', them: '' }; } }));
+    } else if (s.type === 'cards') {
+      F.push(group('Picture cards', null, fText(s, 'title', 'Title', { after: h, help: TITLE_HELP }), fText(s, 'subtitle', 'Subtitle'),
+        fRange(s, 'columns', 'Columns', { min: 1, max: 6, def: 4 })));
+      F.push(objList(s, 'items', { key: 'cards-' + s.id, label: 'Cards', addText: '+ Add card',
+        title: function (x) { return x.title || '(card)'; }, sub: function (x) { return x.sub; },
+        thumb: function (x) { return x.image ? { kind: 'img', url: assetUrl(x.image) } : null; },
+        body: function (x, cc, hh) { add(cc, [fImage(x, 'image', 'Picture', { after: hh }), row(fText(x, 'title', 'Title', { after: hh }), fText(x, 'sub', 'Small text')), fLink(x, 'link', 'Link (optional)'), fToggle(x, 'newTab', 'Open in a new tab', { defOn: true })]); },
+        make: function () { return { image: '', title: 'NEW CARD', sub: '', link: '', newTab: true }; } }));
+      F.push(moreFields(s, h));
     } else if (s.type === 'cta') {
-      F.push(group('Content', null, fText(s, 'title', 'Title', { after: h }), fText(s, 'text', 'Text', { multi: true, rows: 3, after: h, help: '**bold**, *italic*, [link](https://…)' })));
-      F.push(buttonsEditor(s, 'buttons', 'Buttons'));
+      F.push(group('Dialog box', null, fText(s, 'title', 'Name tag', { after: h, ph: 'SUL' }), fImage(s, 'image', 'Face picture (empty = your logo)'),
+        fText(s, 'text', 'What it says', { multi: true, rows: 3, after: h, help: '**bold**, *italic*, [link](https://…)' })));
+      F.push(buttonsEditor(s, 'buttons', 'Choices (buttons)'));
     } else if (s.type === 'marquee') {
       F.push(group('Scrolling band', null, fText(s, 'text', 'Text', { after: h, help: 'Repeats forever. Use ✦ between words.' }),
-        row(fSelect(s, 'style', 'Style', [['gradient', 'Pink → purple'], ['holo', 'Holographic'], ['glass', 'Glass'], ['dark', 'Dark']]),
-          fRange(s, 'tilt', 'Tilt', { min: -8, max: 8, step: 0.5, def: -2, suffix: '°' })),
-        el('div', { class: 'note', html: 'Scroll speed is in <b>🌀 Animations</b>.' })));
+        row(fSelect(s, 'style', 'Style', [['gradient', 'Pink'], ['holo', 'Holographic'], ['glass', 'White'], ['dark', 'Dark']]),
+          fRange(s, 'tilt', 'Tilt', { min: -8, max: 8, step: 0.5, def: 0, suffix: '°' }))));
     } else if (s.type === 'video') {
-      F.push(group('Video', null, fText(s, 'title', 'Title', { after: h }), fText(s, 'subtitle', 'Subtitle'),
+      F.push(group('Video', null, fText(s, 'title', 'Title', { after: h, help: TITLE_HELP }), fText(s, 'subtitle', 'Subtitle'),
         fImage(s, 'url', 'Video', { media: true, after: h, help: 'Paste a YouTube / Vimeo link (best), or upload an .mp4 under 45 MB.' }),
         fImage(s, 'poster', 'Cover picture (for uploaded videos)')));
     } else if (s.type === 'image') {
@@ -770,12 +818,11 @@
       F.push(group('Space', null, fRange(s, 'height', 'Height', { min: 0, max: 400, step: 5, def: 60, suffix: 'px', after: h })));
     }
     if (s.type !== 'spacer') {
-      var lay = [
-        row(fSelect(s, 'width', 'Width', [['narrow', 'Narrow'], ['normal', 'Normal'], ['wide', 'Wide'], ['full', 'Full screen']], { def: 'normal' }),
-          fSelect(s, 'align', 'Align', [['left', 'Left'], ['center', 'Center'], ['right', 'Right']], { def: s.type === 'hero' ? 'left' : 'center' }),
-          fSelect(s, 'spacing', 'Space around', [['none', 'None'], ['small', 'Small'], ['normal', 'Normal'], ['large', 'Large']], { def: 'normal' }))
-      ];
-      if (s.type !== 'marquee' && s.type !== 'cta') lay.push(fToggle(s, 'panel', 'Put it in a glass box'));
+      var lay = [row(
+        fSelect(s, 'width', 'Width', [['normal', 'Normal'], ['half', 'Half (sits next to another half)'], ['narrow', 'Narrow'], ['full', 'Full screen']], { def: 'normal', after: h }),
+        fSelect(s, 'align', 'Align', [['left', 'Left'], ['center', 'Center'], ['right', 'Right']], { def: 'left' }),
+        fSelect(s, 'spacing', 'Space around', [['none', 'None'], ['small', 'Small'], ['normal', 'Normal'], ['large', 'Large']], { def: 'normal' }))];
+      if (['marquee', 'cta', 'hero'].indexOf(s.type) < 0) lay.push(fToggle(s, 'panel', 'Put it in a pixel box'));
       F.push(group('Section layout', null, lay));
     }
     F.unshift(fToggle(s, 'visible', 'Show this section', { defOn: true, after: h }));
@@ -788,6 +835,7 @@
     ['pages', '▤', 'Pages & Layout'],
     ['kits', '🥁', 'Drum Kits'],
     ['gallery', '🖼', 'Cover Arts & Edits'],
+    ['reviews', '💬', 'Reviews'],
     ['intro', '✨', 'Intro Page'],
     ['brand', '💗', 'Logo & Site Info'],
     ['header', '☰', 'Menu, Footer & Socials'],
@@ -845,7 +893,7 @@
             transform: function (v) { return slug(v) || p.id; },
             after: function (v) { renamePage(p, v); h(); refreshPageSel(); }
           })),
-          fToggle(p, 'inNav', 'Show in the menu', { defOn: true, after: h }),
+          row(fToggle(p, 'inNav', 'Show in the menu', { defOn: true, after: h }), fSelect(p, 'icon', 'Menu icon', [['none', 'None'], ['home', 'House'], ['grid', 'Grid'], ['image', 'Picture'], ['bag', 'Bag'], ['music', 'Music'], ['video', 'Video'], ['star', 'Star'], ['sparkle', 'Sparkle'], ['user', 'Person']], { def: 'none' })),
           el('button', { class: 'ab small', type: 'button', text: '✎ Edit this page’s sections ↓', onclick: function () { S.pageSel = p.id; refreshPageSel(); renderSectionsArea(); pvGoto(p.id); secBox.scrollIntoView({ behavior: 'smooth' }); } })]);
       },
       onOpen: function (p) { pvGoto(p.id); }
@@ -941,6 +989,7 @@
         add(c, [
           row(fText(k, 'title', 'Kit name', { after: h }), fText(k, 'badge', 'Badge (optional)', { ph: 'NEW, FREE, 50% OFF…' })),
           fImage(k, 'image', 'Cover picture', { after: h }),
+          fText(k, 'tags', 'Tags (comma separated)', { ph: 'DRUMS, 808S, FX', after: h }),
           fText(k, 'description', 'Description', { multi: true, rows: 2 }),
           row(fText(k, 'price', 'Price', { ph: '$25 or FREE', after: h }), fText(k, 'oldPrice', 'Old price (crossed out)', { ph: 'optional' })),
           row(fText(k, 'buttonText', 'Button text', { ph: 'GO TO' }), fToggle(k, 'newTab', 'Open link in a new tab', { defOn: true })),
@@ -953,7 +1002,7 @@
       empty: 'No kits yet.'
     });
     var addBtn = el('button', { class: 'ab primary small', text: '+ Add drum kit', onclick: function () {
-      list.addItem({ id: uid('k'), title: 'NEW KIT', image: '', price: '', oldPrice: '', badge: 'NEW', description: '', buttonText: 'GO TO', link: '', newTab: true, featured: false, soldOut: false, visible: true }, true);
+      list.addItem({ id: uid('k'), title: 'NEW KIT', image: '', price: '', oldPrice: '', badge: 'NEW', tags: '', description: '', buttonText: 'GO TO', link: '', newTab: true, featured: false, soldOut: false, visible: true }, true);
     } });
     add(E, group('Your kits', 'top = first', el('div', { class: 'add-row', style: 'margin:0 0 10px' }, addBtn), list));
     if (S._addKit) { S._addKit = false; addBtn.click(); }
@@ -1053,11 +1102,25 @@
   };
 
   VIEWS.header = function (E) {
-    var h = S.cfg.header, f = S.cfg.footer;
+    var h = S.cfg.header;
+    if (!S.cfg.announcement) S.cfg.announcement = { enabled: false, text: '', linkText: '', link: '', countdownTo: '' };
+    if (!S.cfg.footer || typeof S.cfg.footer !== 'object') S.cfg.footer = {};
+    var an = S.cfg.announcement, f = S.cfg.footer;
     add(E, head('Menu, Footer & Socials', 'Menu items come from your pages — reorder them in <b>Pages & Layout</b>.'));
+    add(E, group('Announcement bar', 'the strip at the very top',
+      fToggle(an, 'enabled', 'Show the announcement bar'),
+      fText(an, 'text', 'Text', { ph: '✦ NEW DROP: … ✦' }),
+      row(fText(an, 'linkText', 'Link text', { ph: 'GET IT ▶' }), fLink(an, 'link', 'Link goes to', { help: ' ' })),
+      (function () {
+        var inp = el('input', { type: 'datetime-local' }); inp.value = an.countdownTo || '';
+        inp.addEventListener('input', function () { an.countdownTo = inp.value; changed(); });
+        return field('Countdown to (optional)', 'Shows “Ends in 2d 4h 10m” — great for sales. Leave empty for no countdown.', el('div', { class: 'inline' }, inp, el('button', { class: 'ab small', type: 'button', text: 'Clear', onclick: function () { inp.value = ''; an.countdownTo = ''; changed(); } })));
+      })()));
     add(E, group('Top menu bar', null,
-      row(fSelect(h, 'style', 'Look', [['glass', 'Frosted glass'], ['solid', 'Solid'], ['transparent', 'Transparent']], { def: 'glass' }), el('div', null, fToggle(h, 'sticky', 'Stays at the top when scrolling', { defOn: true }), fToggle(h, 'showSocials', 'Show social icons', { defOn: true }))),
-      row(fText(h, 'ctaText', 'Right-side button text (empty = no button)'), fLink(h, 'ctaLink', 'Button goes to', { help: ' ' }))));
+      row(fSelect(h, 'layout', 'Width', [['bar', 'Full-width bar'], ['pill', 'Compact (fits content)']], { def: 'bar' }),
+        fSelect(h, 'style', 'Look', [['solid', 'Solid'], ['glass', 'See-through'], ['transparent', 'No box']], { def: 'solid' })),
+      row(fToggle(h, 'sticky', 'Stays at the top when scrolling', { defOn: true }), fToggle(h, 'showSocials', 'Show social icons', { defOn: true })),
+      row(fText(h, 'ctaText', 'Right-side button text (empty = none)'), fLink(h, 'ctaLink', 'Button goes to', { help: ' ' }))));
     var socials = listEditor(S.cfg.socials, {
       key: 'soc',
       title: function (s) { return (s.platform || 'link').toUpperCase(); },
@@ -1069,15 +1132,41 @@
     });
     S.cfg.socials.forEach(function (s) { if (!s.id) s.id = uid('so'); });
     add(E, group('Social links', 'icons with no link are hidden', socials, el('div', { class: 'add-row' }, el('button', { class: 'ab small', text: '+ Add social', onclick: function () { socials.addItem({ id: uid('so'), platform: 'instagram', url: '' }); } }))));
-    add(E, group('Footer', null, fText(f, 'text', 'Footer text'), fToggle(f, 'showLogo', 'Show logo', { defOn: true }), fToggle(f, 'showSocials', 'Show social icons', { defOn: true })));
+    add(E, group('Footer', null, fText(f, 'tagline', 'Line under the logo'), fText(f, 'copyright', 'Bottom text', { ph: '© 2026 SUL0557' }),
+      row(fToggle(f, 'showLogo', 'Show logo', { defOn: true }), fToggle(f, 'showSocials', 'Show social icons', { defOn: true }))));
+    add(E, objList(f, 'columns', { key: 'fcol', label: 'Footer link columns', subLabel: 'e.g. SHOP / HELP', addText: '+ Add column',
+      title: function (c) { return c.title || '(column)'; }, sub: function (c) { return (c.links || []).length + ' links'; },
+      body: function (c, cc, hh) {
+        add(cc, fText(c, 'title', 'Column title', { after: hh }));
+        if (!Array.isArray(c.links)) c.links = [];
+        add(cc, objList(c, 'links', { key: 'flink-' + c.id, label: 'Links', addText: '+ Add link',
+          title: function (l) { return l.text || '(link)'; }, sub: function (l) { return l.link; },
+          body: function (l, lc, lh) { add(lc, [fText(l, 'text', 'Text', { after: lh }), fLink(l, 'link', 'Goes to', { after: lh })]); },
+          make: function () { return { text: 'New link', link: '' }; } }));
+      },
+      make: function () { return { title: 'NEW', links: [] }; } }));
+    add(E, group('Newsletter box', 'optional',
+      el('div', { class: 'note', html: 'Paste the form link from a free newsletter service (e.g. Mailchimp, Kit/ConvertKit, Buttondown, Formspree). Empty = no newsletter box.' }),
+      fText(f, 'newsletterAction', 'Form link (action URL)', { nospell: true, ph: 'https://…' }),
+      row(fText(f, 'newsletterTitle', 'Title', { ph: 'STAY IN THE LOOP' }), fText(f, 'newsletterText', 'Text'))));
+  };
+
+  VIEWS.reviews = function (E) {
+    if (!Array.isArray(S.cfg.reviews)) S.cfg.reviews = [];
+    add(E, head('Reviews', 'Quotes shown as scrolling pixel speech bubbles. Add a <b>💬 Reviews</b> section on any page (or turn them on under the hero picture).'));
+    add(E, objList(S.cfg, 'reviews', { key: 'rev', label: 'Reviews', addText: '+ Add review',
+      title: function (r) { return r.handle || '(no name)'; }, sub: function (r) { return r.text; },
+      thumb: function (r) { return r.avatar ? { kind: 'img', url: assetUrl(r.avatar) } : null; },
+      body: function (r, c, h) { add(c, [row(fText(r, 'handle', 'Name / @', { after: h }), fImage(r, 'avatar', 'Profile picture (optional)', { after: h })), fText(r, 'text', 'What they said', { multi: true, rows: 2, after: h })]); },
+      make: function () { return { handle: '@someone', avatar: '', text: 'these drums go crazy' }; } }));
   };
 
   var PRESETS = [
-    { name: 'Cotton Candy', theme: { primary: '#ff2bc2', secondary: '#8a3cff', accent: '#38c8ff', highlight: '#fff27a', text: '#1c0b33', muted: '#7a5a9a', surface: '#ffffff', surfaceOpacity: 0.62 }, bg: { skyTop: '#fbe3f6', skyMid: '#e9ecff', skyBottom: '#ffe9f7' } },
-    { name: 'Midnight Holo', theme: { primary: '#ff4fd8', secondary: '#9b5cff', accent: '#3de3ff', highlight: '#fff27a', text: '#f7ecff', muted: '#c9b3e8', surface: '#1d1035', surfaceOpacity: 0.6 }, bg: { skyTop: '#140a2b', skyMid: '#2a1557', skyBottom: '#3b1747' } },
-    { name: 'Mint Dream', theme: { primary: '#14c39a', secondary: '#7a5cff', accent: '#ffb84d', highlight: '#fff27a', text: '#10243a', muted: '#5b7488', surface: '#ffffff', surfaceOpacity: 0.65 }, bg: { skyTop: '#e3fff4', skyMid: '#eef3ff', skyBottom: '#f3fff9' } },
-    { name: 'Peach Pop', theme: { primary: '#ff5f7e', secondary: '#ff8a3d', accent: '#7b6cff', highlight: '#fff27a', text: '#2b1020', muted: '#8a6070', surface: '#ffffff', surfaceOpacity: 0.65 }, bg: { skyTop: '#fff0e6', skyMid: '#ffe8f1', skyBottom: '#fff6df' } },
-    { name: 'Y2K Chrome', theme: { primary: '#4d7cff', secondary: '#b04dff', accent: '#00d9ff', highlight: '#e8ff5a', text: '#0e1240', muted: '#5d6390', surface: '#ffffff', surfaceOpacity: 0.55 }, bg: { skyTop: '#eef2ff', skyMid: '#f6eaff', skyBottom: '#e8fbff' } }
+    { name: 'SUL Candy', theme: { primary: '#ff3fc8', secondary: '#8a3cff', accent: '#38c8ff', highlight: '#ffe14d', text: '#2a1240', muted: '#76659a', surface: '#ffffff', surfaceOpacity: 0.96 }, bg: { skyTop: '#fbe3f6', skyMid: '#e9ecff', skyBottom: '#ffe9f7' } },
+    { name: 'Night Mode', theme: { primary: '#ff4fd8', secondary: '#9b5cff', accent: '#3de3ff', highlight: '#ffe14d', text: '#f7ecff', muted: '#c9b3e8', surface: '#1d1035', surfaceOpacity: 0.95 }, bg: { skyTop: '#140a2b', skyMid: '#2a1557', skyBottom: '#3b1747' } },
+    { name: 'Mint Arcade', theme: { primary: '#14c39a', secondary: '#7a5cff', accent: '#ffb84d', highlight: '#ffe14d', text: '#10243a', muted: '#5b7488', surface: '#ffffff', surfaceOpacity: 0.96 }, bg: { skyTop: '#e3fff4', skyMid: '#eef3ff', skyBottom: '#f3fff9' } },
+    { name: 'Peach Pop', theme: { primary: '#ff5f7e', secondary: '#ff8a3d', accent: '#7b6cff', highlight: '#ffe14d', text: '#2b1020', muted: '#8a6070', surface: '#ffffff', surfaceOpacity: 0.96 }, bg: { skyTop: '#fff0e6', skyMid: '#ffe8f1', skyBottom: '#fff6df' } },
+    { name: 'Gameboy', theme: { primary: '#5b8c32', secondary: '#306230', accent: '#8bac0f', highlight: '#e0f8d0', text: '#0f380f', muted: '#306230', surface: '#e0f8d0', surfaceOpacity: 1 }, bg: { skyTop: '#c4dfa0', skyMid: '#b5d38a', skyBottom: '#9bbc0f' } }
   ];
   VIEWS.theme = function (E) {
     var t = S.cfg.theme;
@@ -1089,18 +1178,18 @@
     add(E, group('Colors', null, row(fColor(t, 'primary', 'Main (pink)'), fColor(t, 'secondary', 'Second (purple)'), fColor(t, 'accent', 'Accent (blue)')),
       row(fColor(t, 'highlight', 'Sparkle ✦ colour'), fColor(t, 'text', 'Text'), fColor(t, 'muted', 'Soft text')),
       row(fColor(t, 'surface', 'Cards / boxes'), fRange(t, 'surfaceOpacity', 'Card see-through', { min: 0, max: 1, step: 0.01, def: 0.62, fmt: function (v) { return Math.round((1 - v) * 100) + '%'; } }))));
-    add(E, group('Fonts', 'from Google Fonts', row(fSelect(t, 'headingFont', 'Titles & menu', FONTS), fSelect(t, 'bodyFont', 'Normal text', FONTS), fSelect(t, 'uiFont', 'Small labels', FONTS)),
-      row(fSelect(t, 'headingWeight', 'Title thickness', [[400, 'Regular'], [700, 'Bold'], [900, 'Extra bold']], { num: true, def: 900 }),
+    add(E, group('Fonts', 'pixel fonts are at the top of each list', row(fSelect(t, 'headingFont', 'Titles & menu', FONTS), fSelect(t, 'bodyFont', 'Normal text', FONTS), fSelect(t, 'uiFont', 'Small labels', FONTS)),
+      row(fSelect(t, 'headingWeight', 'Title thickness', [[400, 'Regular'], [700, 'Bold'], [900, 'Extra bold']], { num: true, def: 700 }),
         el('div', null, fToggle(t, 'uppercaseHeadings', 'ALL CAPS titles', { defOn: true }), fToggle(t, 'headingItalic', 'Italic titles')))));
-    add(E, group('Shapes', null, row(fSelect(t, 'buttonStyle', 'Buttons', [['chunky', 'Chunky 3D pill'], ['pill', 'Glowy pill'], ['square', 'Rounded square'], ['outline', 'Outline'], ['pixel', 'Pixel']]),
-      fSelect(t, 'cardStyle', 'Cards', [['glass', 'Frosted glass'], ['holo', 'Holographic border'], ['solid', 'Solid'], ['outline', 'Outline']])),
-      row(fRange(t, 'radius', 'Corner roundness', { min: 0, max: 40, def: 22, suffix: 'px' }), fRange(t, 'contentWidth', 'Page width', { min: 800, max: 1600, step: 10, def: 1180, suffix: 'px' }))));
+    add(E, group('Shapes', null, row(fSelect(t, 'buttonStyle', 'Buttons', [['pixel', 'Pixel (3D press)'], ['pill', 'Smooth pill'], ['outline', 'Outline']], { def: 'pixel' }),
+      fSelect(t, 'cardStyle', 'Boxes & cards', [['pixel', 'Pixel frames'], ['soft', 'Smooth rounded']], { def: 'pixel' })),
+      row(fRange(t, 'pixelBorder', 'Pixel border thickness', { min: 1, max: 6, def: 3, suffix: 'px' }), fRange(t, 'contentWidth', 'Page width', { min: 800, max: 1600, step: 10, def: 1180, suffix: 'px' }))));
   };
 
   VIEWS.background = function (E) {
     var b = S.cfg.background;
     add(E, head('Background', 'The animated pixel sky is drawn live in the browser — no big image to load.'));
-    add(E, group('Type', null, fSelect(b, 'type', 'Background', [['pixel-sky', 'Animated pixel sky (clouds, rainbow…)'], ['gradient', 'Simple gradient'], ['image', 'Your own image']], { after: function () { renderTab(); } })));
+    add(E, group('Type', null, fSelect(b, 'type', 'Background', [['pixel-sky', 'Animated pixel sky (clouds, rainbow…)'], ['grid', 'Pixel grid paper'], ['gradient', 'Simple gradient'], ['plain', 'Plain colour (top colour)'], ['image', 'Your own image']], { after: function () { renderTab(); } })));
     add(E, group('Sky colours', null, row(fColor(b, 'skyTop', 'Top'), fColor(b, 'skyMid', 'Middle'), fColor(b, 'skyBottom', 'Bottom'))));
     if (b.type === 'pixel-sky') add(E, group('Pixel sky', null,
       fRange(b, 'pixelSize', 'Pixel size', { min: 2, max: 8, def: 4, suffix: 'px', help: 'Bigger = chunkier retro pixels.' }),
@@ -1121,7 +1210,7 @@
     add(E, group('When things appear', 'as you scroll', row(fSelect(a, 'entrance', 'Entrance style', [['fade-up', 'Fade up'], ['fade', 'Fade'], ['zoom', 'Zoom in'], ['pop', 'Pop (bouncy)'], ['slide', 'Slide in'], ['flip', 'Flip'], ['blur', 'Blur in'], ['none', 'None']], { after: function () { setTimeout(replay, 150); } }),
       fRange(a, 'stagger', 'Delay between items', { min: 0, max: 300, step: 10, def: 90, suffix: 'ms' })),
       fSelect(a, 'pageTransition', 'Changing pages', [['fade', 'Fade'], ['slide', 'Slide'], ['zoom', 'Zoom'], ['none', 'None']])));
-    add(E, group('Hover effects', null, row(fSelect(a, 'cardHover', 'Kit cards', [['tilt', '3D tilt'], ['lift', 'Lift up'], ['grow', 'Grow'], ['glow', 'Glow'], ['none', 'None']]),
+    add(E, group('Hover effects', null, row(fSelect(a, 'cardHover', 'Cards', [['lift', 'Pop up (pixel)'], ['grow', 'Grow'], ['glow', 'Glow'], ['none', 'None']]),
       fSelect(a, 'buttonHover', 'Buttons', [['bounce', 'Bounce'], ['wiggle', 'Wiggle'], ['glow', 'Glow'], ['grow', 'Grow'], ['shine', 'Shine sweep'], ['none', 'None']]))));
     add(E, group('Logo', null, fToggle(a, 'logoFloat', 'Floating logo', { defOn: true }), fToggle(a, 'logoGlow', 'Glow around logo', { defOn: true })));
     add(E, group('Sparkles & sky', null, fToggle(a, 'cursorTrail', 'Sparkle trail following the mouse', { defOn: true }),

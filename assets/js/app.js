@@ -9,14 +9,16 @@
   /* ---------- defaults (used when a setting is missing) ---------- */
   var DEFAULTS = {
     meta: { title: 'SUL0557', description: '', favicon: 'assets/img/favicon.png', shareImage: '' },
-    brand: { name: 'SUL0557', logo: 'assets/img/logo.png', headerLogoSize: 72 },
+    brand: { name: 'SUL0557', logo: 'assets/img/logo.png', headerLogoSize: 44 },
     intro: { enabled: true, logo: 'assets/img/logo.png', logoSize: 520, title: '', subtitle: '', buttonText: '✦ ENTER', logoAnimation: 'float', exitAnimation: 'zoom', oncePerSession: false, autoEnterSeconds: 0, showSparkleBurst: true },
     theme: { primary: '#ff2bc2', secondary: '#8a3cff', accent: '#38c8ff', highlight: '#fff27a', text: '#1c0b33', muted: '#7a5a9a', surface: '#ffffff', surfaceOpacity: 0.62, headingFont: 'Fraunces', bodyFont: 'Fraunces', uiFont: 'Space Grotesk', headingWeight: 900, headingItalic: false, uppercaseHeadings: true, radius: 22, buttonStyle: 'chunky', cardStyle: 'glass', contentWidth: 1180 },
     background: { type: 'pixel-sky', skyTop: '#fbe3f6', skyMid: '#e9ecff', skyBottom: '#ffe9f7', pixelSize: 4, clouds: true, rainbow: true, sprouts: true, bubbles: true, sparkles: true, rays: true, image: '', imageFit: 'cover', overlayColor: '#ffffff', overlayOpacity: 0 },
     animations: { enabled: true, speed: 1, entrance: 'fade-up', stagger: 90, pageTransition: 'fade', cardHover: 'tilt', buttonHover: 'bounce', logoFloat: true, logoGlow: true, cursorTrail: true, cursorTrailColor: 'rainbow', cloudSpeed: 1, sparkleAmount: 1, marqueeSpeed: 1 },
-    header: { sticky: true, showSocials: true, ctaText: '', ctaLink: '', style: 'glass' },
+    header: { layout: 'pill', sticky: true, showSocials: true, ctaText: '', ctaLink: '', style: 'glass' },
+    announcement: { enabled: false, text: '', linkText: '', link: '', countdownTo: '' },
     socials: [],
-    footer: { text: '', showSocials: true, showLogo: true },
+    footer: { tagline: '', text: '', showSocials: true, showLogo: true, columns: [], newsletterTitle: '', newsletterText: '', newsletterAction: '', copyright: '' },
+    reviews: [],
     pages: [{ id: 'home', title: 'HOME', inNav: true, sections: [] }],
     kits: [],
     galleryCategories: [],
@@ -25,7 +27,10 @@
   };
 
   /* Google Fonts that the admin can pick from (weights each family really has) */
+  // Fontshare fonts (free) — loaded from api.fontshare.com
+  var FONTSHARE = { 'Clash Display': 'clash-display@400,500,600,700', 'Satoshi': 'satoshi@400,500,700,900', 'General Sans': 'general-sans@400,500,600,700', 'Cabinet Grotesk': 'cabinet-grotesk@400,500,700,800,900', 'Clash Grotesk': 'clash-grotesk@400,500,600,700' };
   var FONT_SPECS = {
+    'Chivo': 'wght@400;500;700;900',
     'Fraunces': 'ital,wght@0,400;0,700;0,900;1,400;1,700;1,900',
     'Space Grotesk': 'wght@400;500;700',
     'Poppins': 'ital,wght@0,400;0,700;0,900;1,400;1,700;1,900',
@@ -50,6 +55,14 @@
   var SYSTEM_FONTS = { 'System': 'system-ui, -apple-system, "Segoe UI", sans-serif', 'Georgia': 'Georgia, serif', 'Courier': '"Courier New", monospace' };
 
   var ICONS = {
+    home: '<path d="M4 11l8-7 8 7"/><path d="M6 9.5V20h12V9.5"/>',
+    grid: '<rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/>',
+    image: '<rect x="3.5" y="4.5" width="17" height="15" rx="3"/><circle cx="9" cy="10" r="1.8"/><path d="M20 16l-5-5-8 8.5"/>',
+    bag: '<path d="M5 8h14l-1 12H6z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/>',
+    star: '<path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.9 6.8 19.6l1-5.8L3.5 9.7l5.9-.8z"/>',
+    sparkle: '<path d="M12 3c.6 4.6 2.4 6.4 7 7-4.6.6-6.4 2.4-7 7-.6-4.6-2.4-6.4-7-7 4.6-.6 6.4-2.4 7-7z"/>',
+    user: '<circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20c1.2-3.8 4-5.5 7.5-5.5s6.3 1.7 7.5 5.5"/>',
+    video: '<rect x="3" y="6" width="13" height="12" rx="3"/><path d="M16 10.5l5-3v9l-5-3z"/>',
     instagram: '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/>',
     youtube: '<rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="M10 9.2v5.6l4.8-2.8z" fill="currentColor" stroke="none"/>',
     tiktok: '<path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 3c.4 2.6 2.2 4.4 5 4.6"/>',
@@ -194,9 +207,15 @@
     return '"' + String(name || '').replace(/["\\]/g, '') + '", ' + fallback;
   }
   function loadFont(name) {
-    if (!name || SYSTEM_FONTS[name] || !(name in FONT_SPECS)) return;
+    if (!name || SYSTEM_FONTS[name]) return;
     var id = 'gf-' + name.replace(/\s+/g, '-').toLowerCase();
     if (document.getElementById(id)) return;
+    if (FONTSHARE[name]) {
+      var fl = document.createElement('link'); fl.id = id; fl.rel = 'stylesheet';
+      fl.href = 'https://api.fontshare.com/v2/css?f[]=' + FONTSHARE[name] + '&display=swap';
+      document.head.appendChild(fl); return;
+    }
+    if (!(name in FONT_SPECS)) return;
     var spec = FONT_SPECS[name];
     var l = document.createElement('link');
     l.id = id; l.rel = 'stylesheet';
@@ -213,7 +232,8 @@
     r.setProperty('--muted', safeColor(t.muted, '#7a5a9a'));
     r.setProperty('--surface-rgb', hexToRgbStr(safeColor(t.surface, '#ffffff')));
     r.setProperty('--surface-a', String(clamp(num(t.surfaceOpacity, 0.62), 0, 1)));
-    r.setProperty('--radius', clamp(num(t.radius, 22), 0, 60) + 'px');
+    r.setProperty('--radius', clamp(num(t.radius, 0), 0, 60) + 'px');
+    r.setProperty('--b', clamp(Math.round(num(t.pixelBorder, 3)), 1, 6) + 'px');
     r.setProperty('--content-w', clamp(num(t.contentWidth, 1180), 700, 2000) + 'px');
     r.setProperty('--header-logo', clamp(num(cfg.brand.headerLogoSize, 72), 24, 140) + 'px');
     r.setProperty('--font-h', fontStack(t.headingFont, 'Georgia, serif'));
@@ -226,10 +246,10 @@
     r.setProperty('--marquee-speed', String(clamp(num(a.marqueeSpeed, 1), 0.1, 6)));
     [t.headingFont, t.bodyFont, t.uiFont].forEach(loadFont);
 
-    b.setAttribute('data-btn', t.buttonStyle || 'chunky');
-    b.setAttribute('data-card', t.cardStyle || 'glass');
+    b.setAttribute('data-btn', t.buttonStyle || 'pixel');
+    b.setAttribute('data-card', t.cardStyle || 'pixel');
     b.setAttribute('data-btnhover', a.buttonHover || 'bounce');
-    b.setAttribute('data-cardhover', a.cardHover || 'tilt');
+    b.setAttribute('data-cardhover', a.cardHover || 'lift');
     b.setAttribute('data-entrance', (a.enabled === false) ? 'none' : (a.entrance || 'fade-up'));
     var motion = a.enabled !== false && !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
     b.classList.toggle('no-motion', a.enabled === false);
@@ -237,7 +257,8 @@
 
     // background
     var top = safeColor(bg.skyTop, '#fbe3f6'), mid = safeColor(bg.skyMid, '#e9ecff'), bot = safeColor(bg.skyBottom, '#ffe9f7');
-    b.style.background = 'linear-gradient(180deg,' + top + ',' + mid + ' 55%,' + bot + ')';
+    b.classList.toggle('bg-grid', bg.type === 'grid');
+    b.style.background = (bg.type === 'grid' || bg.type === 'plain') ? top : 'linear-gradient(180deg,' + top + ',' + mid + ' 55%,' + bot + ')';
     b.style.backgroundAttachment = 'fixed';
     var bgi = document.getElementById('bg-image');
     var img = bg.type === 'image' ? asset(bg.image) : '';
@@ -261,33 +282,62 @@
   }
 
   /* ---------- header / footer ---------- */
-  function socialsHtml() {
+  function headline(t) {
+    // {words} in curly brackets get the holographic gradient
+    return esc(t).replace(/\{([^}]*)\}/g, '<span class="holo">$1</span>').replace(/\n/g, '<br>');
+  }
+  function socialsHtml(cls) {
     return (cfg.socials || []).filter(function (s) { return s && normLink(s.url); }).map(function (s) {
       var name = String(s.platform || 'link').toLowerCase();
-      return '<a class="social" ' + linkAttrs(s.url, true) + ' aria-label="' + esc(s.label || name) + '" title="' + esc(s.label || name) + '">' + icon(name) + '</a>';
+      return '<a class="' + (cls || 'icon-btn') + '" ' + linkAttrs(s.url, true) + ' aria-label="' + esc(s.label || name) + '" title="' + esc(s.label || name) + '">' + icon(name) + '</a>';
     }).join('');
   }
   function navPages() { return cfg.pages.filter(function (p) { return p.inNav !== false; }); }
   function pageHref(p) { return p === cfg.pages[0] ? '#/' : '#/' + encodeURIComponent(p.id); }
 
+  var annTimer = 0;
+  function renderAnnouncement() {
+    var a = cfg.announcement || {}, el = document.getElementById('announce');
+    clearInterval(annTimer);
+    var dismissed = false; try { dismissed = sessionStorage.getItem('sul.annHidden') === String(a.text || ''); } catch (e) {}
+    if (!a.enabled || !a.text || (dismissed && !IS_PREVIEW)) { el.hidden = true; el.innerHTML = ''; return; }
+    var end = a.countdownTo ? new Date(a.countdownTo).getTime() : NaN;
+    el.hidden = false;
+    el.innerHTML = '<div class="ann-inner"><span>' + sparkleText(a.text) + '</span>' +
+      (isFinite(end) ? '<span class="ann-count" data-count></span>' : '') +
+      (a.linkText && normLink(a.link) ? '<a ' + linkAttrs(a.link) + '>' + esc(a.linkText) + '</a>' : '') +
+      '</div><button class="ann-x" type="button" aria-label="Hide announcement">×</button>';
+    el.querySelector('.ann-x').onclick = function () { el.hidden = true; try { sessionStorage.setItem('sul.annHidden', String(a.text || '')); } catch (e) {} };
+    if (isFinite(end)) {
+      var c = el.querySelector('[data-count]');
+      var tick = function () {
+        var ms = end - Date.now();
+        if (ms <= 0) { c.textContent = 'Ended'; clearInterval(annTimer); return; }
+        var d = Math.floor(ms / 864e5), h = Math.floor(ms / 36e5) % 24, m = Math.floor(ms / 6e4) % 60;
+        c.textContent = 'Ends in ' + d + 'd ' + h + 'h ' + (m < 10 ? '0' : '') + m + 'm';
+      };
+      tick(); annTimer = setInterval(tick, 20000);
+    }
+  }
+
   function renderHeader() {
     var h = cfg.header, el = document.getElementById('site-header');
-    el.className = (h.sticky !== false ? 'is-sticky ' : '') + 'style-' + (h.style || 'glass');
+    el.className = (h.sticky !== false ? 'is-sticky ' : '') + 'style-' + (h.style || 'glass') + ' layout-' + (h.layout || 'pill');
     var logo = asset(cfg.brand.logo);
-    var socials = h.showSocials !== false ? socialsHtml() : '';
-    var cta = h.ctaText ? '<a class="btn header-cta" ' + linkAttrs(h.ctaLink) + ' style="padding:12px 22px;font-size:15px">' + sparkleText(h.ctaText) + '</a>' : '';
-    el.innerHTML =
-      '<a class="brand" href="#/" aria-label="' + esc(cfg.brand.name) + ' home">' +
-        (logo ? '<img src="' + esc(logo) + '" alt="' + esc(cfg.brand.name) + '">' : '<span class="brand-text">' + esc(cfg.brand.name) + '</span>') +
-      '</a>' +
-      '<nav class="nav" id="main-nav" aria-label="Main">' +
-        navPages().map(function (p) { return '<a href="' + pageHref(p) + '" data-page="' + esc(p.id) + '">' + esc(p.title) + '</a>'; }).join('') +
-        '<div class="nav-mobile-extra">' + socials + (cta ? cta.replace('header-cta', '') : '') + '</div>' +
-      '</nav>' +
-      '<div class="header-right">' +
-        (socials ? '<div class="socials">' + socials + '</div>' : '') + cta +
+    var socials = h.showSocials !== false ? socialsHtml('icon-btn') : '';
+    var cta = h.ctaText ? '<a class="btn btn-sm hd-cta" ' + linkAttrs(h.ctaLink) + '>' + sparkleText(h.ctaText) + '</a>' : '';
+    el.innerHTML = '<div class="hd">' +
+      '<div class="hd-pill hd-main">' +
+        '<a class="brand" href="#/" aria-label="' + esc(cfg.brand.name) + ' home">' +
+          (logo ? '<img src="' + esc(logo) + '" alt="' + esc(cfg.brand.name) + '">' : '<span class="brand-text">' + esc(cfg.brand.name) + '</span>') + '</a>' +
+        '<nav class="nav" id="main-nav" aria-label="Main">' +
+          navPages().map(function (p) { return '<a href="' + pageHref(p) + '" data-page="' + esc(p.id) + '">' + (p.icon && p.icon !== 'none' ? icon(p.icon) : '') + '<span>' + esc(p.title) + '</span></a>'; }).join('') +
+          '<div class="nav-mobile-extra">' + socials + (cta ? cta.replace('hd-cta', '') : '') + '</div>' +
+        '</nav>' +
         '<button class="burger" aria-label="Menu" aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span></button>' +
-      '</div>';
+      '</div>' +
+      ((socials || cta) ? '<div class="hd-pill hd-right"><div class="socials" style="display:flex;gap:6px">' + socials + '</div>' + cta + '</div>' : '') +
+    '</div>';
     var burger = el.querySelector('.burger');
     burger.addEventListener('click', function () {
       var open = !el.classList.contains('nav-open');
@@ -306,19 +356,39 @@
   function renderFooter() {
     var f = cfg.footer, el = document.getElementById('site-footer');
     var logo = asset(cfg.brand.logo);
-    el.innerHTML = '<div class="footer-inner">' +
-      (f.showLogo !== false && logo ? '<img class="footer-logo logo-glow" src="' + esc(logo) + '" alt="" loading="lazy">' : '') +
-      (f.showSocials !== false ? '<div class="socials">' + socialsHtml() + '</div>' : '') +
-      (f.text ? '<p class="footer-text">' + rich(f.text) + '</p>' : '') +
-      '</div>';
+    var cols = (f.columns || []).filter(function (c) { return c && (c.title || (c.links || []).length); });
+    var news = !!normLink(f.newsletterAction);
+    var tmpl = '1.4fr' + (cols.length ? ' repeat(' + cols.length + ', minmax(0, .8fr))' : '') + (news ? ' 1.4fr' : '');
+    el.innerHTML = '<div class="ft-wrap"><div class="ft"><div class="ft-cols" style="grid-template-columns:' + tmpl + '">' +
+      '<div class="ft-brand">' +
+        (f.showLogo !== false && logo ? '<img class="footer-logo" src="' + esc(logo) + '" alt="' + esc(cfg.brand.name) + '" loading="lazy">' : '') +
+        (f.tagline ? '<p>' + rich(f.tagline) + '</p>' : '') +
+        (f.showSocials !== false ? '<div class="ft-socials">' + socialsHtml('icon-btn') + '</div>' : '') +
+      '</div>' +
+      cols.map(function (c) {
+        return '<div><h4>' + esc(c.title) + '</h4><ul>' + (c.links || []).filter(function (l) { return l && l.text; }).map(function (l) {
+          return '<li><a ' + linkAttrs(l.link) + '>' + esc(l.text) + '</a></li>';
+        }).join('') + '</ul></div>';
+      }).join('') +
+      (news ? '<div class="ft-news"><h4>' + esc(f.newsletterTitle || 'Newsletter') + '</h4>' + (f.newsletterText ? '<p>' + esc(f.newsletterText) + '</p>' : '') +
+        '<form class="ft-form" method="post" target="_blank" action="' + esc(normLink(f.newsletterAction)) + '"><input type="email" name="email" required placeholder="you@email.com" aria-label="Email"><button type="submit" aria-label="Sign up">→</button></form></div>' : '') +
+      '</div><div class="ft-bottom"><span>' + esc(f.copyright || ('© ' + new Date().getFullYear() + ' ' + cfg.brand.name)) + '</span>' + (f.text ? '<span>' + rich(f.text) + '</span>' : '') + '</div></div></div>';
   }
 
   /* ---------- sections ---------- */
+  function moreLinks(s) {
+    var out = [];
+    if (s.moreText && normLink(s.moreLink)) out.push({ text: s.moreText, link: s.moreLink, style: 'primary' });
+    if (s.more2Text && normLink(s.more2Link)) out.push({ text: s.more2Text, link: s.more2Link, style: 'ghost' });
+    return out;
+  }
   function secHead(s) {
-    if (!s.title && !s.subtitle) return '';
-    return '<div class="sec-head reveal">' +
-      (s.title ? '<h2 class="sec-title">' + esc(s.title) + '</h2>' : '') +
-      (s.subtitle ? '<p class="sec-sub">' + rich(s.subtitle) + '</p>' : '') + '</div>';
+    var top = s.moreStyle === 'top' ? moreLinks(s)[0] : null;
+    if (!s.title && !s.subtitle && !top) return '';
+    return '<div class="sec-head reveal"><div>' +
+      (s.title ? '<h2 class="sec-title">' + headline(s.title) + '</h2>' : '') +
+      (s.subtitle ? '<p class="sec-sub">' + rich(s.subtitle) + '</p>' : '') + '</div>' +
+      (top ? '<a class="sec-link" ' + linkAttrs(top.link) + '>' + esc(top.text) + '</a>' : '') + '</div>';
   }
   function buttonsHtml(list) {
     list = (list || []).filter(function (b) { return b && b.text; });
@@ -329,26 +399,67 @@
     }).join('') + '</div>';
   }
   function moreHtml(s) {
-    return s.moreText ? '<div class="more-row reveal"><a class="btn btn-ghost" ' + linkAttrs(s.moreLink) + '>' + sparkleText(s.moreText) + '</a></div>' : '';
+    if (s.moreStyle === 'top') return '';
+    var l = moreLinks(s); if (!l.length) return '';
+    return '<div class="more-row reveal">' + l.map(function (b) {
+      return '<a class="btn' + (b.style === 'ghost' ? ' btn-ghost' : '') + '" ' + linkAttrs(b.link) + '>' + sparkleText(b.text) + '</a>';
+    }).join('') + '</div>';
   }
-  function colsStyle(n) { n = clamp(Math.round(num(n, 3)), 1, 6); return '--cols:' + n + ';--cols-md:' + Math.min(n, 2); }
+  function colsStyle(n, def) { n = clamp(Math.round(num(n, def || 3)), 1, 6); return '--cols:' + n + ';--cols-md:' + Math.min(n, 2); }
+  function hashQuery() { var m = /[?&]q=([^&]*)/.exec(location.hash); try { return m ? decodeURIComponent(m[1].replace(/\+/g, ' ')) : ''; } catch (e) { return ''; } }
+  function reviewsStrip(big) {
+    var list = (cfg.reviews || []).filter(function (r) { return r && r.text; });
+    if (!list.length) return '';
+    var one = list.map(function (r) {
+      var av = asset(r.avatar), init = String(r.handle || '?').replace(/^@/, '').charAt(0).toUpperCase();
+      return '<div class="rev"><div class="rev-who">' + (av ? '<img class="rev-av" src="' + esc(av) + '" alt="" loading="lazy">' : '<span class="rev-av">' + esc(init) + '</span>') +
+        '<span>' + esc(r.handle) + '</span></div><p>' + esc(r.text) + '</p></div>';
+    }).join('');
+    return '<div class="rev-strip' + (big ? ' reviews-big' : '') + '"><div class="rev-track">' + one + one + '</div></div>';
+  }
 
   var R = {};
   R.hero = function (s) {
-    var a = cfg.animations;
-    var logo = asset(s.logo);
-    var layout = s.layout || 'logo-left';
-    if (!logo && layout !== 'text-only') layout = 'text-only';
-    var art = layout === 'text-only' ? '' :
-      '<div class="hero-art reveal"><img class="hero-logo' + (a.logoFloat !== false ? ' logo-float' : '') + (a.logoGlow !== false ? ' logo-glow' : '') +
-      '" src="' + esc(logo) + '" alt="' + esc(cfg.brand.name) + ' logo" style="--logo-size:' + clamp(num(s.logoSize, 620), 120, 1400) + 'px"></div>';
-    var small = s.smallText ? (s.smallLink ? '<a class="hero-small reveal" ' + linkAttrs(s.smallLink) + '>' + esc(s.smallText) + '</a>' : '<span class="hero-small reveal">' + esc(s.smallText) + '</span>') : '';
-    return '<div class="hero layout-' + esc(layout) + (s.fullHeight !== false ? ' fullh' : '') + '">' + art +
+    var a = cfg.animations, logo = asset(s.logo);
+    var side = s.rightSide || 'art';
+    var layout = s.layout || 'split';
+    var art = '';
+    if (side === 'art' && logo) {
+      art = '<div class="win"><div class="win-bar"><span>' + esc(s.windowTitle || (String(cfg.brand.name || 'sul').toLowerCase() + '.exe')) + '</span><i></i><i></i><i></i></div>' +
+        '<div class="art-card"><img class="' + (a.logoFloat !== false ? 'logo-float' : '') + '" src="' + esc(logo) + '" alt="' + esc(cfg.brand.name) + ' logo"></div>' +
+        '<div class="win-foot"><span>' + esc(s.windowFooter || 'LV.99 PRODUCER') + '</span><b>♥ ♥ ♥</b></div></div>';
+    } else if (side === 'logo' && logo) {
+      art = '<img class="hero-logo-solo' + (a.logoFloat !== false ? ' logo-float' : '') + (a.logoGlow !== false ? ' logo-glow' : '') + '" src="' + esc(logo) + '" alt="' + esc(cfg.brand.name) + ' logo">';
+    } else if (side === 'mosaic') {
+      var imgs = (cfg.gallery || []).filter(function (g) { return g && g.visible !== false && g.src; }).map(function (g) {
+        var t = asset(g.thumb) || (youtubeId(g.src) ? 'https://img.youtube.com/vi/' + youtubeId(g.src) + '/hqdefault.jpg' : (mediaKind(g.src) === 'image' ? asset(g.src) : ''));
+        return t;
+      }).filter(Boolean).concat((cfg.kits || []).filter(function (k) { return k && k.visible !== false && k.image; }).map(function (k) { return asset(k.image); }));
+      if (imgs.length) {
+        while (imgs.length < 9) imgs = imgs.concat(imgs);
+        var cols = [[], [], []]; imgs.slice(0, 12).forEach(function (u, i) { cols[i % 3].push(u); });
+        art = '<div class="mosaic">' + cols.map(function (c) {
+          var h = c.map(function (u) { return '<img src="' + esc(u) + '" alt="" loading="lazy">'; }).join('');
+          return '<div class="mosaic-col">' + h + h + '</div>';
+        }).join('') + '</div><div class="mosaic-bar"><span>Recent work</span><button type="button" data-mosaic-pause>❚❚ Pause</button></div>';
+      }
+    }
+    var revs = s.showReviews ? reviewsStrip(false) : '';
+    var hasArt = !!(art || revs) && layout !== 'centered';
+    var chips = String(s.chips || '').split(',').map(function (c) { return c.trim(); }).filter(Boolean);
+    var search = s.showSearch ? '<form class="hero-search reveal" data-hero-search role="search">' + icon('search') +
+      '<input type="search" placeholder="' + esc(s.searchPlaceholder || 'Search…') + '" aria-label="Search"><button class="btn btn-sm" type="submit">Search</button></form>' +
+      (chips.length ? '<div class="chips reveal"><span>Try:</span>' + chips.map(function (c) { return '<button type="button" data-chip="' + esc(c) + '">' + esc(c) + '</button>'; }).join('') + '</div>' : '') : '';
+    var small = s.smallText ? (normLink(s.smallLink) ? '<a class="hero-small reveal" ' + linkAttrs(s.smallLink) + '>' + esc(s.smallText) + '</a>' : '<span class="hero-small reveal">' + esc(s.smallText) + '</span>') : '';
+    return '<div class="hero layout-' + esc(layout) + (s.fullHeight ? ' fullh' : '') + (hasArt ? '' : ' no-art') + '">' +
       '<div class="hero-copy">' +
-        (s.title ? '<h1 class="hero-title reveal">' + esc(s.title) + '</h1>' : '') +
+        (s.status ? '<div class="status reveal"><i></i>' + esc(s.status) + '</div>' : '') +
+        (s.title ? '<h1 class="hero-title reveal">' + headline(s.title) + '</h1>' : '') +
         (s.text ? '<p class="hero-text reveal">' + rich(s.text) + '</p>' : '') + small +
-        buttonsHtml(s.buttons) +
-      '</div></div>';
+        buttonsHtml(s.buttons) + search +
+      '</div>' +
+      (hasArt ? '<div class="hero-art-col reveal">' + art + revs + '</div>' : (layout === 'centered' && revs ? '<div style="width:100%;margin-top:30px">' + revs + '</div>' : '')) +
+      '</div>';
   };
   R.marquee = function (s) {
     var txt = String(s.text || '✦').trim() + ' ';
@@ -359,36 +470,40 @@
       '<span class="sr-only">' + esc(s.text) + '</span></div>';
   };
   function kitCard(k) {
-    var img = asset(k.image);
-    var sold = !!k.soldOut;
-    var href = normLink(k.link);
+    var img = asset(k.image), sold = !!k.soldOut, href = normLink(k.link), live = href && !sold;
+    var tags = String(k.tags || '').split(',').map(function (t) { return t.trim(); }).filter(Boolean).slice(0, 5);
     var btnText = sold ? 'SOLD OUT' : (k.buttonText || 'GO TO');
-    var btn = (sold || !href)
-      ? '<span class="btn is-disabled" aria-disabled="true">' + sparkleText(btnText) + '</span>'
-      : '<a class="btn" ' + linkAttrs(k.link, k.newTab !== false) + '>' + sparkleText(btnText) + '</a>';
-    return '<article class="card reveal" data-tilt data-search="' + esc((k.title + ' ' + (k.description || '') + ' ' + (k.badge || '')).toLowerCase()) + '">' +
-      '<div class="card-media">' + (k.badge ? '<span class="badge">' + esc(k.badge) + '</span>' : '') +
-        (img ? '<img src="' + esc(img) + '" alt="' + esc(k.title) + '" loading="lazy">' : '') +
-        (sold ? '<div class="soldout-tag">SOLD OUT</div>' : '') + '</div>' +
+    var inner =
+      '<div class="card-media">' + (img ? '<img src="' + esc(img) + '" alt="' + esc(k.title) + '" loading="lazy">' : '') + (sold ? '<div class="soldout-tag">SOLD OUT</div>' : '') + '</div>' +
       '<div class="card-body">' +
-        '<h3 class="card-title">' + esc(k.title) + '</h3>' +
-        (k.description ? '<p class="card-desc">' + rich(k.description) + '</p>' : '') +
-        ((k.price || k.oldPrice) ? '<div class="price-row">' + (k.price ? '<span class="price">' + esc(k.price) + '</span>' : '') + (k.oldPrice ? '<span class="old-price">' + esc(k.oldPrice) + '</span>' : '') + '</div>' : '<div class="price-row"></div>') +
-        btn +
-      '</div></article>';
+        '<div class="card-top"><h3 class="card-title">' + esc(k.title) + '</h3>' + (k.badge ? '<span class="badge">' + esc(k.badge) + '</span>' : '') + '</div>' +
+        (tags.length ? '<div class="tags">' + tags.map(function (t) { return '<span class="tag">' + esc(t) + '</span>'; }).join('') + '</div>' : '') +
+        (k.description ? '<p class="card-desc">' + rich(k.description).replace(/<a [^>]*>|<\/a>/g, '') + '</p>' : '') +
+        '<div class="card-foot"><div class="price-row">' + (k.price ? '<span class="price">' + esc(k.price) + '</span>' : '') + (k.oldPrice ? '<span class="old-price">' + esc(k.oldPrice) + '</span>' : '') + '</div>' +
+          '<span class="btn go-btn' + (live ? '' : ' is-disabled') + '">' + sparkleText(btnText) + ' ' + (live ? '→' : '') + '</span></div>' +
+      '</div>';
+    var search = esc((k.title + ' ' + (k.description || '') + ' ' + (k.badge || '') + ' ' + (k.tags || '')).toLowerCase());
+    return live
+      ? '<a class="card reveal" data-tilt data-search="' + search + '" ' + linkAttrs(k.link, k.newTab !== false) + '>' + inner + '</a>'
+      : '<article class="card reveal" data-tilt data-search="' + search + '">' + inner + '</article>';
   }
   R.kits = function (s) {
     var list = (cfg.kits || []).filter(function (k) { return k && k.visible !== false && (s.filter !== 'featured' || k.featured); });
     var lim = Math.round(num(s.limit, 0)); if (lim > 0) list = list.slice(0, lim);
-    var search = s.showSearch ? '<div class="search-box reveal">' + icon('search') + '<input type="search" placeholder="Search kits…" aria-label="Search kits" data-kit-search></div>' : '';
-    var body = list.length ? '<div class="grid" style="' + colsStyle(s.columns) + '">' + list.map(kitCard).join('') + '</div>' : '<p class="empty">No kits yet — add some in the admin panel ✦</p>';
-    return secHead(s) + search + body + '<p class="empty" data-kit-empty hidden>No kits match that search.</p>' + moreHtml(s);
+    var search = s.showSearch ? '<div class="search-box reveal">' + icon('search') + '<input type="search" placeholder="Search kits…" aria-label="Search kits" data-kit-search value="' + esc(hashQuery()) + '"></div>' : '';
+    var grid = list.length ? '<div class="grid" style="' + colsStyle(s.columns) + '">' + list.map(kitCard).join('') + '</div>' : '<p class="empty">No kits yet — add some in the admin panel ✦</p>';
+    var body = grid + '<p class="empty" data-kit-empty hidden>No kits match that search.</p>' + moreHtml(s);
+    return secHead(s) + search + (s.style === 'plain' ? body : '<div class="kit-box reveal">' + body + '</div>');
   };
   function galleryItems(s, cat) {
+    var q = hashQuery().toLowerCase();
+    var cats = {}; (cfg.galleryCategories || []).forEach(function (c) { cats[c.id] = String(c.label || '').toLowerCase(); });
     return (cfg.gallery || []).filter(function (g) {
       if (!g || g.visible === false || !g.src) return false;
       var c = s.category && s.category !== 'all' ? s.category : cat;
-      return !c || c === 'all' || g.category === c;
+      if (c && c !== 'all' && g.category !== c) return false;
+      if (q && s.showTabs) return ((g.title || '') + ' ' + (g.description || '') + ' ' + (cats[g.category] || '')).toLowerCase().indexOf(q) >= 0;
+      return true;
     });
   }
   function galleryGrid(s) {
@@ -398,7 +513,7 @@
     st.items = items;
     if (!items.length) return '<p class="empty">Nothing here yet ✦</p>';
     var cats = {}; (cfg.galleryCategories || []).forEach(function (c) { cats[c.id] = c.label; });
-    var cls = s.layout === 'masonry' ? 'g-masonry' : 'g-grid';
+    var cls = s.layout === 'masonry' ? 'g-masonry' : (s.layout === 'bento' ? 'g-bento' : 'g-grid');
     return '<div class="' + cls + '" style="' + colsStyle(s.columns) + '">' + items.map(function (g, i) {
       var kind = mediaKind(g.src), thumb = asset(g.thumb), src = asset(g.src), media;
       if (!thumb && kind === 'youtube') thumb = 'https://img.youtube.com/vi/' + youtubeId(g.src) + '/hqdefault.jpg';
@@ -406,9 +521,8 @@
       else if (kind === 'video') media = '<video src="' + esc(src) + '#t=0.1" muted playsinline preload="metadata"></video>';
       else if (kind === 'image') media = '<img src="' + esc(src) + '" alt="' + esc(g.title || '') + '" loading="lazy">';
       else media = '<div style="aspect-ratio:16/9"></div>';
-      var isVid = kind !== 'image';
       return '<button type="button" class="g-item reveal" data-sec="' + esc(s.id) + '" data-idx="' + i + '" aria-label="Open ' + esc(g.title || 'item') + '">' + media +
-        (isVid ? '<span class="g-play">' + icon('play') + '</span>' : '') +
+        (kind !== 'image' ? '<span class="g-play">' + icon('play') + '</span>' : '') +
         (s.showLabels && cats[g.category] ? '<span class="g-tag">' + esc(cats[g.category]) + '</span>' : '') +
         ((g.title || g.description) ? '<span class="g-cap"><strong>' + esc(g.title) + '</strong>' + (g.description ? '<small>' + esc(g.description) + '</small>' : '') + '</span>' : '') +
         '</button>';
@@ -416,28 +530,52 @@
   }
   R.gallery = function (s) {
     if (!galleryState[s.id]) galleryState[s.id] = { cat: 'all', items: [] };
-    var st = galleryState[s.id];
-    var tabs = '';
+    var st = galleryState[s.id], tabs = '';
     if (s.showTabs && (!s.category || s.category === 'all')) {
-      var cats = [{ id: 'all', label: s.allLabel || 'ALL' }].concat(cfg.galleryCategories || []);
+      var cats = [{ id: 'all', label: s.allLabel || 'All' }].concat(cfg.galleryCategories || []);
       tabs = '<div class="tabs reveal" role="tablist">' + cats.map(function (c) {
         return '<button type="button" role="tab" class="tab' + (st.cat === c.id ? ' is-active' : '') + '" aria-selected="' + (st.cat === c.id) + '" data-cat="' + esc(c.id) + '" data-sec="' + esc(s.id) + '">' + esc(c.label) + '</button>';
       }).join('') + '</div>';
     } else st.cat = 'all';
     return secHead(s) + tabs + '<div class="g-wrap" data-gwrap="' + esc(s.id) + '">' + galleryGrid(s) + '</div>' + moreHtml(s);
   };
+  R.reviews = function (s) {
+    var strip = reviewsStrip(true);
+    return secHead(s) + (strip ? '<div class="reveal">' + strip + '</div>' : '<p class="empty">Add reviews in the admin panel ✦</p>');
+  };
+  R.compare = function (s) {
+    var rows = (s.rows || []).filter(function (r) { return r && (r.label || r.you || r.them); });
+    var side = function (cls, label, key, ic) {
+      return '<div class="cmp-side ' + cls + ' reveal"><h3>' + esc(label) + '</h3><ul>' + rows.map(function (r) {
+        return '<li><span class="cmp-ic">' + ic + '</span><span><small>' + esc(r.label) + '</small>' + esc(r[key]) + '</span></li>';
+      }).join('') + '</ul></div>';
+    };
+    return secHead(s) + '<div class="vs">' + side('cmp-you', s.youLabel || 'US', 'you', '✓') +
+      '<div class="vs-badge reveal" aria-hidden="true">VS</div>' + side('cmp-them', s.themLabel || 'OTHERS', 'them', '✕') + '</div>';
+  };
+  R.cards = function (s) {
+    var items = (s.items || []).filter(function (c) { return c && (c.image || c.title); });
+    return secHead(s) + (items.length ? '<div class="cards-grid" style="' + colsStyle(s.columns, 2) + '">' + items.map(function (c) {
+      var href = normLink(c.link), img = asset(c.image);
+      var inner = '<div class="xcard-media">' + (img ? '<img src="' + esc(img) + '" alt="' + esc(c.title || '') + '" loading="lazy">' : '') +
+        (href ? '<span class="xcard-go">' + icon('play') + '</span>' : '') + '</div>' +
+        (c.title ? '<h3>' + esc(c.title) + '</h3>' : '') + (c.sub ? '<p>' + esc(c.sub) + '</p>' : '');
+      return href ? '<a class="xcard reveal" ' + linkAttrs(c.link, c.newTab !== false) + '>' + inner + '</a>' : '<div class="xcard reveal">' + inner + '</div>';
+    }).join('') + '</div>' : '<p class="empty">Add cards in the admin panel ✦</p>') + moreHtml(s);
+  };
   R.text = function (s) {
     return '<div class="text-block size-' + esc(s.size || 'normal') + '">' +
-      (s.title ? '<h2 class="sec-title reveal">' + esc(s.title) + '</h2>' : '') +
+      (s.title ? '<h2 class="sec-title reveal">' + headline(s.title) + '</h2>' : '') +
       (s.text ? '<div class="rich reveal">' + rich(s.text) + '</div>' : '') +
       buttonsHtml(s.buttons) + '</div>';
   };
   R.cta = function (s) {
-    return '<div class="panel cta-box reveal">' +
-      '<span class="cta-star" style="top:18px;left:6%">✦</span><span class="cta-star" style="bottom:22px;right:7%;animation-delay:-1.2s">✦</span><span class="cta-star" style="top:30%;right:16%;font-size:20px;animation-delay:-.6s">✦</span>' +
-      (s.title ? '<h2 class="sec-title">' + esc(s.title) + '</h2>' : '') +
-      (s.text ? '<div class="rich">' + rich(s.text) + '</div>' : '') +
-      buttonsHtml(s.buttons) + '</div>';
+    var face = asset(s.image || cfg.brand.logo);
+    return '<div class="dialog reveal">' +
+      (face ? '<div class="dlg-face"><img src="' + esc(face) + '" alt=""></div>' : '<div></div>') +
+      '<div class="dlg-body">' + (s.title ? '<div class="dlg-name">' + esc(s.title) + '</div>' : '') +
+      (s.text ? '<div class="rich">' + rich(s.text) + '</div>' : '') + buttonsHtml(s.buttons) + '</div>' +
+      '<span class="dlg-next" aria-hidden="true">▼</span></div>';
   };
   R.video = function (s) {
     var u = String(s.url || '').trim(), kind = mediaKind(u), inner = '';
@@ -466,10 +604,10 @@
   function renderSection(s) {
     var fn = R[s.type];
     if (!fn || s.visible === false) return '';
-    var cls = 'section t-' + esc(s.type) + ' w-' + esc(s.width || 'normal') + ' a-' + esc(s.align || (s.type === 'hero' ? 'left' : 'center')) + ' sp-' + esc(s.spacing || 'normal');
+    var cls = 'section t-' + esc(s.type) + ' w-' + esc(s.width || 'normal') + ' a-' + esc(s.align || 'left') + ' sp-' + esc(s.spacing || 'normal');
     var inner;
     try { inner = fn(s); } catch (e) { console.error('Section failed', s, e); inner = ''; }
-    if (s.type === 'marquee') return '<section class="' + cls + '" data-sid="' + esc(s.id) + '">' + inner + '</section>';
+    if (s.type === 'marquee') return '<section class="' + cls + ' w-full" data-sid="' + esc(s.id) + '" style="overflow:hidden">' + inner + '</section>';
     var panel = s.panel && s.type !== 'cta' ? '<div class="panel">' + inner + '</div>' : inner;
     return '<section class="' + cls + '" data-sid="' + esc(s.id) + '"><div class="wrap">' + panel + '</div></section>';
   }
@@ -521,6 +659,10 @@
         });
         return;
       }
+      var chip = e.target.closest('[data-chip]');
+      if (chip) { var f = chip.closest('.hero-copy').querySelector('[data-hero-search] input'); if (f) { f.value = chip.getAttribute('data-chip'); goSearch(f.value); } return; }
+      var mp = e.target.closest('[data-mosaic-pause]');
+      if (mp) { var m = mp.parentElement.previousElementSibling; var paused = m.classList.toggle('paused'); mp.textContent = paused ? '▶ Play' : '❚❚ Pause'; return; }
       var gi = e.target.closest('.g-item');
       if (gi) { openLightbox(gi.getAttribute('data-sec'), num(gi.getAttribute('data-idx'), 0)); return; }
       var btn = e.target.closest('.btn');
@@ -529,6 +671,13 @@
         window.SulFX.burst(r.left + r.width / 2, r.top + r.height / 2, 14);
       }
     };
+    root.onsubmit = function (e) {
+      var f = e.target.closest('[data-hero-search]');
+      if (!f) return;
+      e.preventDefault(); goSearch(f.querySelector('input').value);
+    };
+    var ks = root.querySelector('[data-kit-search]');
+    if (ks && ks.value) setTimeout(function () { ks.dispatchEvent(new Event('input', { bubbles: true })); }, 0);
     root.oninput = function (e) {
       if (!e.target.matches('[data-kit-search]')) return;
       var q = e.target.value.trim().toLowerCase(), sec = e.target.closest('.section'), shown = 0;
@@ -554,6 +703,15 @@
         setTimeout(function () { if (!c.matches(':hover')) c.style.transition = ''; }, 520);
       }
     };
+  }
+  function goSearch(q) {
+    q = String(q || '').trim();
+    // send searches to the first page that has a searchable kits grid (or a gallery with tabs)
+    var target = null;
+    cfg.pages.forEach(function (p) { if (!target && (p.sections || []).some(function (s) { return s.visible !== false && s.type === 'kits' && s.showSearch; })) target = p; });
+    if (!target) cfg.pages.forEach(function (p) { if (!target && (p.sections || []).some(function (s) { return s.visible !== false && s.type === 'gallery' && s.showTabs; })) target = p; });
+    if (!target) return;
+    location.hash = '#/' + encodeURIComponent(target.id) + (q ? '?q=' + encodeURIComponent(q) : '');
   }
   function cssEsc(s) { return (window.CSS && CSS.escape) ? CSS.escape(s) : String(s).replace(/["\\]/g, '\\$&'); }
   function findSection(id) {
@@ -801,7 +959,7 @@
   /* ---------- boot ---------- */
   function normalize(raw) {
     var c = merge(DEFAULTS, raw || {});
-    ['socials', 'pages', 'kits', 'galleryCategories', 'gallery'].forEach(function (k) { if (!Array.isArray(c[k])) c[k] = DEFAULTS[k]; });
+    ['socials', 'pages', 'kits', 'galleryCategories', 'gallery', 'reviews'].forEach(function (k) { if (!Array.isArray(c[k])) c[k] = DEFAULTS[k]; });
     if (!c.pages.length) c.pages = DEFAULTS.pages;
     c.pages.forEach(function (p, i) {
       if (!p.id) p.id = 'page-' + (i + 1);
@@ -814,6 +972,7 @@
     opts = opts || {};
     cfg = normalize(raw);
     applyTheme();
+    renderAnnouncement();
     renderHeader();
     renderFooter();
     renderPage({ instant: opts.instant, keepScroll: opts.keepScroll });

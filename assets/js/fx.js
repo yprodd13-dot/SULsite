@@ -324,10 +324,11 @@
     if (parts.length > 260) parts.splice(0, parts.length - 260);
     if (!rafFx) { lastFx = 0; rafFx = requestAnimationFrame(loopFx); }
   }
-  function star4(g, x, y, s, rot) {
-    g.save(); g.translate(x, y); g.rotate(rot); g.beginPath();
-    for (var i = 0; i < 8; i++) { var a = i * Math.PI / 4, r = i % 2 === 0 ? s : s * 0.28; g.lineTo(Math.cos(a) * r, Math.sin(a) * r); }
-    g.closePath(); g.fill(); g.restore();
+  // pixel sparkle: a little "+" made of square pixels, snapped to a grid
+  function star4(g, x, y, s) {
+    var p = Math.max(2, Math.round(s / 3)), cx = Math.round(x / p) * p, cy = Math.round(y / p) * p;
+    g.fillRect(cx, cy, p, p);
+    if (s > 4) { g.fillRect(cx - p, cy, p, p); g.fillRect(cx + p, cy, p, p); g.fillRect(cx, cy - p, p, p); g.fillRect(cx, cy + p, p, p); }
   }
   function loopFx(now) {
     var dt = lastFx ? Math.min(0.05, (now - lastFx) / 1000) : 0.016; lastFx = now;
@@ -338,8 +339,7 @@
       p.vy += 160 * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.rot += p.vr * dt;
       var k = p.life / p.max;
       g.globalAlpha = Math.min(1, k * 1.4); g.fillStyle = p.c;
-      g.shadowColor = p.c; g.shadowBlur = 8;
-      star4(g, p.x, p.y, p.s * (0.4 + 0.6 * k), p.rot);
+            star4(g, p.x, p.y, p.s * (0.4 + 0.6 * k));
     }
     g.globalAlpha = 1; g.shadowBlur = 0;
     if (parts.length) rafFx = requestAnimationFrame(loopFx); else { rafFx = 0; g.clearRect(0, 0, window.innerWidth, window.innerHeight); }

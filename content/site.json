@@ -1,7 +1,7 @@
 {
   "version": 1,
   "meta": {
-    "title": "SUL0557 — Beats, Drum Kits & Visuals",
+    "title": "SUL0557 — Drum Kits, Cover Art & Edits",
     "description": "Hi I'm Sul and I make beats & visuals. Drum kits, cover art and edits.",
     "favicon": "assets/img/favicon.png",
     "shareImage": "assets/img/share.jpg"
@@ -9,40 +9,41 @@
   "brand": {
     "name": "SUL0557",
     "logo": "assets/img/logo.png",
-    "headerLogoSize": 72
+    "headerLogoSize": 44
   },
   "intro": {
     "enabled": true,
     "logo": "assets/img/logo.png",
     "logoSize": 520,
     "title": "",
-    "subtitle": "beats ✦ drum kits ✦ visuals",
-    "buttonText": "✦ ENTER",
-    "logoAnimation": "float",
+    "subtitle": "BEATS ✦ DRUM KITS ✦ VISUALS",
+    "buttonText": "▶ PRESS START",
+    "logoAnimation": "bounce",
     "exitAnimation": "zoom",
     "oncePerSession": false,
     "autoEnterSeconds": 0,
     "showSparkleBurst": true
   },
   "theme": {
-    "primary": "#ff2bc2",
+    "primary": "#ff3fc8",
     "secondary": "#8a3cff",
     "accent": "#38c8ff",
-    "highlight": "#fff27a",
-    "text": "#1c0b33",
-    "muted": "#7a5a9a",
+    "highlight": "#ffe14d",
+    "text": "#2a1240",
+    "muted": "#76659a",
     "surface": "#ffffff",
-    "surfaceOpacity": 0.62,
-    "headingFont": "Fraunces",
-    "bodyFont": "Fraunces",
-    "uiFont": "Space Grotesk",
-    "headingWeight": 900,
+    "surfaceOpacity": 0.96,
+    "headingFont": "Pixelify Sans",
+    "bodyFont": "Space Grotesk",
+    "uiFont": "Silkscreen",
+    "headingWeight": 700,
     "headingItalic": false,
     "uppercaseHeadings": true,
-    "radius": 22,
-    "buttonStyle": "chunky",
-    "cardStyle": "glass",
-    "contentWidth": 1180
+    "radius": 0,
+    "buttonStyle": "pixel",
+    "cardStyle": "pixel",
+    "contentWidth": 1180,
+    "pixelBorder": 3
   },
   "background": {
     "type": "pixel-sky",
@@ -64,25 +65,26 @@
   "animations": {
     "enabled": true,
     "speed": 1,
-    "entrance": "fade-up",
+    "entrance": "pop",
     "stagger": 90,
     "pageTransition": "fade",
-    "cardHover": "tilt",
+    "cardHover": "lift",
     "buttonHover": "bounce",
     "logoFloat": true,
     "logoGlow": true,
     "cursorTrail": true,
-    "cursorTrailColor": "rainbow",
+    "cursorTrailColor": "theme",
     "cloudSpeed": 1,
     "sparkleAmount": 1,
     "marqueeSpeed": 1
   },
   "header": {
+    "layout": "bar",
     "sticky": true,
     "showSocials": true,
-    "ctaText": "✦ SHOP",
+    "ctaText": "▶ SHOP",
     "ctaLink": "#/kits",
-    "style": "glass"
+    "style": "solid"
   },
   "socials": [
     {
@@ -103,110 +105,214 @@
     }
   ],
   "footer": {
-    "text": "made with ✦ by SUL0557",
+    "tagline": "Beats, drum kits & visuals by SUL0557.",
     "showSocials": true,
-    "showLogo": true
+    "showLogo": true,
+    "columns": [
+      {
+        "id": "fc1",
+        "title": "SHOP",
+        "links": [
+          {
+            "id": "l1",
+            "text": "All kits",
+            "link": "#/kits"
+          },
+          {
+            "id": "l2",
+            "text": "Museum",
+            "link": "#/museum"
+          }
+        ]
+      },
+      {
+        "id": "fc2",
+        "title": "HELP",
+        "links": [
+          {
+            "id": "l3",
+            "text": "Contact",
+            "link": "https://instagram.com/sul0557"
+          },
+          {
+            "id": "l4",
+            "text": "Instagram",
+            "link": "https://instagram.com/sul0557"
+          }
+        ]
+      }
+    ],
+    "newsletterTitle": "STAY IN THE LOOP",
+    "newsletterText": "New drops, free kits and updates straight to your inbox.",
+    "newsletterAction": "",
+    "copyright": "© 2026 SUL0557 · GAME OVER? NEVER."
   },
   "pages": [
     {
       "id": "home",
       "title": "HOME",
       "inNav": true,
+      "icon": "home",
       "sections": [
         {
           "id": "s-hero",
           "type": "hero",
           "visible": true,
-          "layout": "logo-left",
+          "layout": "split-reverse",
+          "rightSide": "art",
           "logo": "assets/img/logo.png",
-          "logoSize": 620,
-          "title": "SUL0557",
-          "text": "HI IM SUL AND I MAKE BEATS & VISUALS",
+          "windowTitle": "sul0557.exe",
+          "status": "PLAYER 1: SUL0557",
+          "title": "BEATS &\n{VISUALS}",
+          "text": "Hi, I'm Sul. I make drum kits, cover art & edits for producers who want to stand out.",
           "smallText": "Insta @sul0557",
           "smallLink": "https://instagram.com/sul0557",
           "buttons": [
             {
-              "text": "✦ ENTER STORE",
+              "id": "b1",
+              "text": "▶ ENTER SHOP",
               "link": "#/kits",
               "style": "primary",
               "newTab": false
             },
             {
+              "id": "b2",
               "text": "MUSEUM",
               "link": "#/museum",
               "style": "ghost",
               "newTab": false
             }
           ],
-          "fullHeight": true
+          "showSearch": true,
+          "searchPlaceholder": "search kits...",
+          "chips": "drum kit, free, 808, loops",
+          "showReviews": false,
+          "fullHeight": false,
+          "align": "left"
         },
         {
-          "id": "s-marquee",
-          "type": "marquee",
+          "id": "s-reviews",
+          "type": "reviews",
           "visible": true,
-          "text": "BEATS ✦ DRUM KITS ✦ COVER ARTS ✦ EDITS ✦ VISUALS ✦",
-          "style": "gradient",
-          "tilt": -2
+          "title": "",
+          "subtitle": "",
+          "spacing": "small"
         },
         {
           "id": "s-kits-feat",
           "type": "kits",
           "visible": true,
-          "title": "FRESH KITS",
-          "subtitle": "the newest sounds, straight from the cloud",
+          "title": "ITEM {SHOP}",
+          "subtitle": "fresh kits, ready to equip",
+          "style": "box",
           "filter": "featured",
           "limit": 3,
           "columns": 3,
           "showSearch": false,
-          "moreText": "SEE ALL KITS",
+          "moreText": "SEE ALL KITS ▶",
           "moreLink": "#/kits",
-          "align": "center"
+          "more2Text": "",
+          "more2Link": "",
+          "moreStyle": "top",
+          "align": "left"
         },
         {
           "id": "s-gal-feat",
           "type": "gallery",
           "visible": true,
-          "title": "RECENT WORK",
+          "title": "RECENT {DROPS}",
           "subtitle": "cover arts & edits",
           "category": "all",
           "showTabs": false,
-          "layout": "grid",
-          "columns": 3,
-          "limit": 6,
-          "moreText": "ENTER THE MUSEUM",
+          "layout": "bento",
+          "columns": 4,
+          "limit": 5,
+          "moreText": "ENTER MUSEUM ▶",
           "moreLink": "#/museum",
-          "align": "center"
+          "moreStyle": "top",
+          "align": "left"
+        },
+        {
+          "id": "s-why",
+          "type": "compare",
+          "visible": true,
+          "title": "SUL {VS} OTHERS",
+          "subtitle": "choose your fighter",
+          "youLabel": "SUL KITS",
+          "themLabel": "OTHER KITS",
+          "align": "center",
+          "rows": [
+            {
+              "id": "c1",
+              "label": "SOUNDS",
+              "you": "Crispy, mixed, drag & drop ready",
+              "them": "Muddy, clicky, bad mix"
+            },
+            {
+              "id": "c2",
+              "label": "ORGANIZATION",
+              "you": "Labeled & tagged",
+              "them": "Messy names"
+            },
+            {
+              "id": "c3",
+              "label": "EXCLUSIVITY",
+              "you": "Made from scratch",
+              "them": "Recycled sounds"
+            },
+            {
+              "id": "c4",
+              "label": "STYLES",
+              "you": "Built for the underground",
+              "them": "Generic presets"
+            },
+            {
+              "id": "c5",
+              "label": "SUPPORT",
+              "you": "DM me anytime",
+              "them": "No reply"
+            }
+          ]
         },
         {
           "id": "s-cta",
           "type": "cta",
           "visible": true,
-          "title": "LET'S MAKE SOMETHING",
-          "text": "Need a cover art, an edit or custom beats? Hit my DMs ✦",
+          "title": "SUL",
+          "text": "Need a cover art, an edit or custom drums? Pick an option below.",
           "buttons": [
             {
-              "text": "DM ON INSTAGRAM",
+              "id": "b3",
+              "text": "▶ DM ON INSTAGRAM",
               "link": "https://instagram.com/sul0557",
               "style": "primary",
               "newTab": true
+            },
+            {
+              "id": "b4",
+              "text": "▶ BROWSE KITS",
+              "link": "#/kits",
+              "style": "ghost",
+              "newTab": false
             }
           ],
-          "align": "center"
+          "align": "left"
         }
       ]
     },
     {
       "id": "kits",
-      "title": "DRUM KITS",
+      "title": "KITS",
       "inNav": true,
+      "icon": "grid",
       "sections": [
         {
           "id": "s-kits-head",
           "type": "text",
           "visible": true,
-          "title": "DRUM KITS",
-          "text": "Hand-made drums, 808s, loops & one shots. Tap **GO TO** on any kit to grab it.",
-          "align": "center",
+          "title": "ITEM {SHOP}",
+          "text": "Hand-made drums, 808s, loops & one shots. Tap any kit to grab it.",
+          "align": "left",
           "size": "large"
         },
         {
@@ -215,28 +321,30 @@
           "visible": true,
           "title": "",
           "subtitle": "",
+          "style": "box",
           "filter": "all",
           "limit": 0,
           "columns": 3,
           "showSearch": true,
           "moreText": "",
           "moreLink": "",
-          "align": "center"
+          "align": "left"
         }
       ]
     },
     {
       "id": "museum",
-      "title": "MUSEUM.",
+      "title": "MUSEUM",
       "inNav": true,
+      "icon": "image",
       "sections": [
         {
           "id": "s-museum-head",
           "type": "text",
           "visible": true,
-          "title": "THE MUSEUM",
+          "title": "THE {MUSEUM}",
           "text": "Cover arts, edits & visuals. Click anything to see it big.",
-          "align": "center",
+          "align": "left",
           "size": "large"
         },
         {
@@ -247,12 +355,12 @@
           "subtitle": "",
           "category": "all",
           "showTabs": true,
-          "layout": "grid",
+          "layout": "bento",
           "columns": 3,
           "limit": 0,
           "moreText": "",
           "moreLink": "",
-          "align": "center"
+          "align": "left"
         }
       ]
     }
@@ -271,7 +379,8 @@
       "newTab": true,
       "featured": true,
       "soldOut": false,
-      "visible": true
+      "visible": true,
+      "tags": "DRUMS, 808S, FX, ONE SHOTS"
     },
     {
       "id": "k2",
@@ -286,7 +395,8 @@
       "newTab": true,
       "featured": true,
       "soldOut": false,
-      "visible": true
+      "visible": true,
+      "tags": "DRUMS, LOOPS, PLUGG"
     },
     {
       "id": "k3",
@@ -301,7 +411,8 @@
       "newTab": true,
       "featured": true,
       "soldOut": false,
-      "visible": true
+      "visible": true,
+      "tags": "DRUMS, 808S, HATS"
     },
     {
       "id": "k4",
@@ -316,17 +427,18 @@
       "newTab": true,
       "featured": false,
       "soldOut": false,
-      "visible": true
+      "visible": true,
+      "tags": "FREE, DRUMS"
     }
   ],
   "galleryCategories": [
     {
       "id": "cover-arts",
-      "label": "COVER ARTS"
+      "label": "Cover Arts"
     },
     {
       "id": "edits",
-      "label": "EDITS"
+      "label": "Edits"
     }
   ],
   "gallery": [
@@ -395,6 +507,45 @@
       "description": "album cover",
       "link": "",
       "visible": true
+    }
+  ],
+  "announcement": {
+    "enabled": true,
+    "text": "✦ NEW DROP: CLOUD 9 KIT IS OUT ✦",
+    "linkText": "GET IT ▶",
+    "link": "#/kits",
+    "countdownTo": ""
+  },
+  "reviews": [
+    {
+      "id": "r1",
+      "avatar": "",
+      "handle": "@producer.one",
+      "text": "these drums slap different fr"
+    },
+    {
+      "id": "r2",
+      "avatar": "",
+      "handle": "@beatsbyjay",
+      "text": "cloud 9 kit is in every beat now"
+    },
+    {
+      "id": "r3",
+      "avatar": "",
+      "handle": "@nova.prod",
+      "text": "cleanest 808s i own"
+    },
+    {
+      "id": "r4",
+      "avatar": "",
+      "handle": "@lilbeatz",
+      "text": "the cover art sul made me is crazy"
+    },
+    {
+      "id": "r5",
+      "avatar": "",
+      "handle": "@yungmix",
+      "text": "organized af, drag & drop ready"
     }
   ]
 }
