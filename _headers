@@ -1,0 +1,9 @@
+# Cloudflare Pages / Netlify headers
+/content/*
+  Cache-Control: no-cache
+
+/assets/*
+  Cache-Control: public, max-age=3600
+
+/uploads/*
+  Cache-Control: public, max-age=86400
