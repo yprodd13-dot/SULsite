@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>SUL Studio — Admin</title>
+  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body class="locked">
+  <div id="gate"></div>
+  <header class="topbar">
+    <div class="tb-left">
+      <img src="../assets/img/logo.png" alt="" class="tb-logo">
+      <div>
+        <div class="tb-title">SUL STUDIO</div>
+        <div class="tb-status" id="status">Loading…</div>
+      </div>
+    </div>
+    <div class="tb-actions">
+      <button class="ab ghost" id="btn-lock" title="Lock the admin panel">🔒</button>
+      <button class="ab ghost" id="btn-undo" title="Undo (Ctrl+Z)" disabled>↶ Undo</button>
+      <button class="ab ghost" id="btn-redo" title="Redo (Ctrl+Shift+Z)" disabled>↷ Redo</button>
+      <button class="ab ghost hide-sm" id="btn-intro" title="Play the intro page in the preview">▶ Intro</button>
+      <button class="ab ghost hide-sm" id="btn-replay" title="Replay the entrance animations in the preview">✦ Replay</button>
+      <button class="ab ghost show-sm" id="btn-toggle-preview">👁 Preview</button>
+      <a class="ab ghost hide-sm" href="../" target="_blank" rel="noopener">↗ Live site</a>
+      <button class="ab primary" id="btn-publish">🚀 Publish</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="side" id="side" aria-label="Admin sections"></nav>
+    <main class="editor" id="editor" tabindex="-1"></main>
+    <section class="preview" id="preview-pane" aria-label="Live preview">
+      <div class="pv-bar">
+        <div class="seg" id="device-seg">
+          <button data-w="1440" class="on" title="Desktop">🖥</button>
+          <button data-w="820" title="Tablet">▭</button>
+          <button data-w="390" title="Phone">📱</button>
+        </div>
+        <select id="pv-page" aria-label="Preview page"></select>
+        <a class="pv-open" id="pv-open" href="../index.html?draft=1" target="_blank" rel="noopener" title="Open this draft in a new tab">↗ draft</a>
+      </div>
+      <div class="pv-stage" id="pv-stage">
+        <iframe id="pv" title="Site preview" src="about:blank" data-src="../index.html?preview=1"></iframe>
+      </div>
+    </section>
+  </div>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+  <div id="modal" hidden></div>
+
+  <script src="admin.js"></script>
+</body>
+</html>
