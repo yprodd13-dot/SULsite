@@ -1,0 +1,400 @@
+{
+  "version": 1,
+  "meta": {
+    "title": "SUL0557 — Beats, Drum Kits & Visuals",
+    "description": "Hi I'm Sul and I make beats & visuals. Drum kits, cover art and edits.",
+    "favicon": "assets/img/favicon.png",
+    "shareImage": "assets/img/share.jpg"
+  },
+  "brand": {
+    "name": "SUL0557",
+    "logo": "assets/img/logo.png",
+    "headerLogoSize": 72
+  },
+  "intro": {
+    "enabled": true,
+    "logo": "assets/img/logo.png",
+    "logoSize": 520,
+    "title": "",
+    "subtitle": "beats ✦ drum kits ✦ visuals",
+    "buttonText": "✦ ENTER",
+    "logoAnimation": "float",
+    "exitAnimation": "zoom",
+    "oncePerSession": false,
+    "autoEnterSeconds": 0,
+    "showSparkleBurst": true
+  },
+  "theme": {
+    "primary": "#ff2bc2",
+    "secondary": "#8a3cff",
+    "accent": "#38c8ff",
+    "highlight": "#fff27a",
+    "text": "#1c0b33",
+    "muted": "#7a5a9a",
+    "surface": "#ffffff",
+    "surfaceOpacity": 0.62,
+    "headingFont": "Fraunces",
+    "bodyFont": "Fraunces",
+    "uiFont": "Space Grotesk",
+    "headingWeight": 900,
+    "headingItalic": false,
+    "uppercaseHeadings": true,
+    "radius": 22,
+    "buttonStyle": "chunky",
+    "cardStyle": "glass",
+    "contentWidth": 1180
+  },
+  "background": {
+    "type": "pixel-sky",
+    "skyTop": "#fbe3f6",
+    "skyMid": "#e9ecff",
+    "skyBottom": "#ffe9f7",
+    "pixelSize": 4,
+    "clouds": true,
+    "rainbow": true,
+    "sprouts": true,
+    "bubbles": true,
+    "sparkles": true,
+    "rays": true,
+    "image": "",
+    "imageFit": "cover",
+    "overlayColor": "#ffffff",
+    "overlayOpacity": 0
+  },
+  "animations": {
+    "enabled": true,
+    "speed": 1,
+    "entrance": "fade-up",
+    "stagger": 90,
+    "pageTransition": "fade",
+    "cardHover": "tilt",
+    "buttonHover": "bounce",
+    "logoFloat": true,
+    "logoGlow": true,
+    "cursorTrail": true,
+    "cursorTrailColor": "rainbow",
+    "cloudSpeed": 1,
+    "sparkleAmount": 1,
+    "marqueeSpeed": 1
+  },
+  "header": {
+    "sticky": true,
+    "showSocials": true,
+    "ctaText": "✦ SHOP",
+    "ctaLink": "#/kits",
+    "style": "glass"
+  },
+  "socials": [
+    {
+      "platform": "instagram",
+      "url": "https://instagram.com/sul0557"
+    },
+    {
+      "platform": "youtube",
+      "url": ""
+    },
+    {
+      "platform": "tiktok",
+      "url": ""
+    },
+    {
+      "platform": "soundcloud",
+      "url": ""
+    }
+  ],
+  "footer": {
+    "text": "made with ✦ by SUL0557",
+    "showSocials": true,
+    "showLogo": true
+  },
+  "pages": [
+    {
+      "id": "home",
+      "title": "HOME",
+      "inNav": true,
+      "sections": [
+        {
+          "id": "s-hero",
+          "type": "hero",
+          "visible": true,
+          "layout": "logo-left",
+          "logo": "assets/img/logo.png",
+          "logoSize": 620,
+          "title": "SUL0557",
+          "text": "HI IM SUL AND I MAKE BEATS & VISUALS",
+          "smallText": "Insta @sul0557",
+          "smallLink": "https://instagram.com/sul0557",
+          "buttons": [
+            {
+              "text": "✦ ENTER STORE",
+              "link": "#/kits",
+              "style": "primary",
+              "newTab": false
+            },
+            {
+              "text": "MUSEUM",
+              "link": "#/museum",
+              "style": "ghost",
+              "newTab": false
+            }
+          ],
+          "fullHeight": true
+        },
+        {
+          "id": "s-marquee",
+          "type": "marquee",
+          "visible": true,
+          "text": "BEATS ✦ DRUM KITS ✦ COVER ARTS ✦ EDITS ✦ VISUALS ✦",
+          "style": "gradient",
+          "tilt": -2
+        },
+        {
+          "id": "s-kits-feat",
+          "type": "kits",
+          "visible": true,
+          "title": "FRESH KITS",
+          "subtitle": "the newest sounds, straight from the cloud",
+          "filter": "featured",
+          "limit": 3,
+          "columns": 3,
+          "showSearch": false,
+          "moreText": "SEE ALL KITS",
+          "moreLink": "#/kits",
+          "align": "center"
+        },
+        {
+          "id": "s-gal-feat",
+          "type": "gallery",
+          "visible": true,
+          "title": "RECENT WORK",
+          "subtitle": "cover arts & edits",
+          "category": "all",
+          "showTabs": false,
+          "layout": "grid",
+          "columns": 3,
+          "limit": 6,
+          "moreText": "ENTER THE MUSEUM",
+          "moreLink": "#/museum",
+          "align": "center"
+        },
+        {
+          "id": "s-cta",
+          "type": "cta",
+          "visible": true,
+          "title": "LET'S MAKE SOMETHING",
+          "text": "Need a cover art, an edit or custom beats? Hit my DMs ✦",
+          "buttons": [
+            {
+              "text": "DM ON INSTAGRAM",
+              "link": "https://instagram.com/sul0557",
+              "style": "primary",
+              "newTab": true
+            }
+          ],
+          "align": "center"
+        }
+      ]
+    },
+    {
+      "id": "kits",
+      "title": "DRUM KITS",
+      "inNav": true,
+      "sections": [
+        {
+          "id": "s-kits-head",
+          "type": "text",
+          "visible": true,
+          "title": "DRUM KITS",
+          "text": "Hand-made drums, 808s, loops & one shots. Tap **GO TO** on any kit to grab it.",
+          "align": "center",
+          "size": "large"
+        },
+        {
+          "id": "s-kits-all",
+          "type": "kits",
+          "visible": true,
+          "title": "",
+          "subtitle": "",
+          "filter": "all",
+          "limit": 0,
+          "columns": 3,
+          "showSearch": true,
+          "moreText": "",
+          "moreLink": "",
+          "align": "center"
+        }
+      ]
+    },
+    {
+      "id": "museum",
+      "title": "MUSEUM.",
+      "inNav": true,
+      "sections": [
+        {
+          "id": "s-museum-head",
+          "type": "text",
+          "visible": true,
+          "title": "THE MUSEUM",
+          "text": "Cover arts, edits & visuals. Click anything to see it big.",
+          "align": "center",
+          "size": "large"
+        },
+        {
+          "id": "s-museum-gal",
+          "type": "gallery",
+          "visible": true,
+          "title": "",
+          "subtitle": "",
+          "category": "all",
+          "showTabs": true,
+          "layout": "grid",
+          "columns": 3,
+          "limit": 0,
+          "moreText": "",
+          "moreLink": "",
+          "align": "center"
+        }
+      ]
+    }
+  ],
+  "kits": [
+    {
+      "id": "k1",
+      "title": "CLOUD 9 KIT",
+      "image": "uploads/kit-1.jpg",
+      "price": "$25",
+      "oldPrice": "$40",
+      "badge": "NEW",
+      "description": "120+ sounds: drums, 808s, fx & melodic one shots.",
+      "buttonText": "GO TO",
+      "link": "https://instagram.com/sul0557",
+      "newTab": true,
+      "featured": true,
+      "soldOut": false,
+      "visible": true
+    },
+    {
+      "id": "k2",
+      "title": "SUGAR RUSH",
+      "image": "uploads/kit-2.jpg",
+      "price": "$20",
+      "oldPrice": "",
+      "badge": "",
+      "description": "Bouncy drums and sweet loops for hyperpop & plugg.",
+      "buttonText": "GO TO",
+      "link": "https://instagram.com/sul0557",
+      "newTab": true,
+      "featured": true,
+      "soldOut": false,
+      "visible": true
+    },
+    {
+      "id": "k3",
+      "title": "HOLO DRUMS VOL. 1",
+      "image": "uploads/kit-3.jpg",
+      "price": "$30",
+      "oldPrice": "",
+      "badge": "BEST SELLER",
+      "description": "Crispy hats, glassy snares and heavy 808s.",
+      "buttonText": "GO TO",
+      "link": "https://instagram.com/sul0557",
+      "newTab": true,
+      "featured": true,
+      "soldOut": false,
+      "visible": true
+    },
+    {
+      "id": "k4",
+      "title": "STARDUST",
+      "image": "uploads/kit-4.jpg",
+      "price": "FREE",
+      "oldPrice": "",
+      "badge": "FREE",
+      "description": "A free taste of the sound. Go crazy.",
+      "buttonText": "GO TO",
+      "link": "https://instagram.com/sul0557",
+      "newTab": true,
+      "featured": false,
+      "soldOut": false,
+      "visible": true
+    }
+  ],
+  "galleryCategories": [
+    {
+      "id": "cover-arts",
+      "label": "COVER ARTS"
+    },
+    {
+      "id": "edits",
+      "label": "EDITS"
+    }
+  ],
+  "gallery": [
+    {
+      "id": "g1",
+      "category": "cover-arts",
+      "type": "image",
+      "src": "uploads/cover-1.jpg",
+      "thumb": "",
+      "title": "Cover Art",
+      "description": "single cover",
+      "link": "",
+      "visible": true
+    },
+    {
+      "id": "g2",
+      "category": "edits",
+      "type": "image",
+      "src": "uploads/edit-1.jpg",
+      "thumb": "",
+      "title": "Edit #1",
+      "description": "Swap this for a YouTube link or an .mp4 in the admin panel",
+      "link": "",
+      "visible": true
+    },
+    {
+      "id": "g3",
+      "category": "cover-arts",
+      "type": "image",
+      "src": "uploads/cover-2.jpg",
+      "thumb": "",
+      "title": "Night Drive",
+      "description": "ep cover",
+      "link": "",
+      "visible": true
+    },
+    {
+      "id": "g4",
+      "category": "cover-arts",
+      "type": "image",
+      "src": "uploads/cover-3.jpg",
+      "thumb": "",
+      "title": "Bubblegum",
+      "description": "single cover",
+      "link": "",
+      "visible": true
+    },
+    {
+      "id": "g5",
+      "category": "edits",
+      "type": "image",
+      "src": "uploads/edit-2.jpg",
+      "thumb": "",
+      "title": "Edit #2",
+      "description": "music video edit",
+      "link": "",
+      "visible": true
+    },
+    {
+      "id": "g6",
+      "category": "cover-arts",
+      "type": "image",
+      "src": "uploads/cover-4.jpg",
+      "thumb": "",
+      "title": "Dreamscape",
+      "description": "album cover",
+      "link": "",
+      "visible": true
+    }
+  ]
+}
